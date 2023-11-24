@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "name": "this company",
+        "imgURL": "",
+        "contactName": "the contact",
+        "contactMail": "the contactMail",
+        "contactPhone": "the contactPhone",
+        "TechStack" : [
+            "c#",
+            "JS",
+            "webb",
+            "react"
+        ],
+        "presentation": "This is a short presentation for a company",
+        "mentorship": true,
+        "spots": 2,
+        "hasExJob": true
+    },
+    {
+        "id": 2,
+        "name": "this company",
+        "imgURL": "",
+        "contactName": "the contact",
+        "contactMail": "the contactMail",
+        "contactPhone": "the contactPhone",
+        "TechStack" : [
+            "c#",
+            "JS",
+            "webb",
+            "react"
+        ],
+        "presentation": "This is a short presentation for a company",
+        "mentorship": true,
+        "spots": 2,
+        "hasExJob": true
+    },
+    {
+        "id": 3,
+        "name": "this company",
+        "imgURL": "",
+        "contactName": "the contact",
+        "contactMail": "the contactMail",
+        "contactPhone": "the contactPhone",
+        "TechStack" : [
+            "c#",
+            "JS",
+            "webb",
+            "react"
+        ],
+        "presentation": "This is a short presentation for a company",
+        "mentorship": true,
+        "spots": 2,
+        "hasExJob": true
+    }
+]
