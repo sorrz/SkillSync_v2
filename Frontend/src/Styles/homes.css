@@ -1,7 +1,6 @@
 /* homes.css */
 
 .hero-banner {
-  background-image: url("path/to/your/hero-image.jpg");
   background-size: cover;
   background-position: center;
   color: #fff; /* Set text color for better visibility */
