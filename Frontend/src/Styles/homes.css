@@ -1,0 +1,26 @@
+/* homes.css */
+
+.hero-banner {
+  background-image: url("path/to/your/hero-image.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #fff; /* Set text color for better visibility */
+  padding: 100px 0; /* Adjust padding as needed */
+}
+
+.grey-background {
+  background-color: #f0f0f0;
+  padding: 50px 0; /* Adjust padding as needed */
+}
+
+.grey-green-background {
+  background-color: #c1e1c5; /* Adjust background color as needed */
+  padding: 50px 0; /* Adjust padding as needed */
+}
+
+.custom-card {
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  /* Add more custom styles if needed */
+}
