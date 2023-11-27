@@ -9,6 +9,7 @@ import { Navbar } from './Components/Navbar';
 import { Login } from './Pages/Login';
 import Footer from './Components/Footer';
 import { UserModel } from './Models/UserModel';
+import { Profile } from './Pages/Profile';
 
 function App() {
   const [user, setUser] = useState<UserModel | null>(null);
@@ -35,6 +36,7 @@ function App() {
               path="/login"
               element={<Login onLogin={handleLogin} />}
             />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Container>
         <Footer />

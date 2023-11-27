@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+// Login.tsx
+
+import { useState } from 'react';
 import { UserModel } from '../Models/UserModel';
 import { Form, Input, Button, Space } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import '../Styles/login.css';
+import { useNavigate } from "react-router-dom";
+
+
 
 interface LoginProps {
   onLogin: (user: UserModel) => void;
@@ -10,23 +16,28 @@ interface LoginProps {
 export function Login({ onLogin }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     const hashedPassword = hashPassword(password);
 
     const user: UserModel = {
-        mailAdress: email,
-        password: hashedPassword,
-        name: '',
-        TechStack: [],
-        phoneNumber: '',
-        liaPeriod1: '',
-        liaPeriod2: '',
-        presentation: '',
-        imgURL: ''
+      mailAdress: email,
+      password: hashedPassword,
+      name: '',
+      TechStack: [],
+      phoneNumber: '',
+      liaPeriod1: '',
+      liaPeriod2: '',
+      presentation: '',
+      imgURL: ''
     };
-
     onLogin(user);
+
+    navigate('/profile');
+    
+    
+    // IMPLEMENT HANDLER FOR REDIRECTION TO PROFILE WHEN LOGGED IN
   };
 
   const hashPassword = (password: string): string => {
@@ -34,8 +45,8 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', marginTop: '50px' }}>
-      <h1 style={{ textAlign: 'center' }}>Login Form</h1>
+    <div className="LoginContainer">
+      <h3>Login Form</h3>
       <Form onFinish={handleLogin} initialValues={{ remember: true }} size="large">
         <Form.Item
           name="email"
@@ -62,7 +73,7 @@ export function Login({ onLogin }: LoginProps) {
         </Form.Item>
         <Form.Item>
           <Space direction="vertical">
-            <Button type="primary" htmlType="submit" block>
+            <Button htmlType="submit" block>
               Log in
             </Button>
           </Space>
