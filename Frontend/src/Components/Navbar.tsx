@@ -1,18 +1,17 @@
 import { Container, Nav, Navbar as NavbarBS } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Button } from "antd";
+import { UserModel } from "../Models/UserModel";
 
-interface UserProfile {
-    picture: string;
-    // Add other properties as needed
-}
 
 interface NavbarProps {
     isLoggedIn: boolean;
-    userProfile?: UserProfile;
+    user: UserModel;
 }
 
-export function Navbar({ isLoggedIn, userProfile }: NavbarProps) {
+export function Navbar({ isLoggedIn, user }: NavbarProps) {
+    const imgSrc = user?.imgURL || "https://www.svgbackgrounds.com/wp-content/uploads/2021/07/slanted-halftone-subtle-background-graphic.jpg"; // Replace "solid-color-url" with your actual URL or color
+
     return (
         <NavbarBS sticky="top" className="bg-white shadow-sm mb-3">
             <Container>
@@ -23,13 +22,12 @@ export function Navbar({ isLoggedIn, userProfile }: NavbarProps) {
                     <Nav.Link to="/about" as={NavLink} > About </Nav.Link>
                 </Nav>
                 {isLoggedIn ? (
-                    // Render user profile picture and link if logged in
                     <Nav.Link to="/profile" as={NavLink}>
-                        <img src={userProfile?.picture} alt="Profile" className="profile-picture" />
+                        <img src={imgSrc} alt="Profile" className="profile-picture" />
                     </Nav.Link>
                 ) : (
                     <Nav.Link to="/login" as={NavLink}>
-                    <Button>Login</Button>
+                        <Button>Login</Button>
                     </Nav.Link>
                 )}
             </Container>
