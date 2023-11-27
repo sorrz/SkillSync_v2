@@ -7,5 +7,6 @@ export interface UserModel {
       liaPeriod1: string,
       liaPeriod2: string,
       presentation: string,
-      imgURL: string
+      imgURL: string,
+      password: string
 }
