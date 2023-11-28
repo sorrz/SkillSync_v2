@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons'; // Import the Ant Design logout icon
 import { UserModel } from '../Models/UserModel';
 import "../Styles/navbar.css";
-import logo from '../assets/png_small.png';
+import logo from '../assets/dans_logo_png.png';
 import profile from '../assets/profil.png';
 import { useNavigate } from "react-router-dom";
 

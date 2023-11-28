@@ -37,7 +37,6 @@ export function Login({ onLogin }: LoginProps) {
     navigate('/profile');
     
     
-    // IMPLEMENT HANDLER FOR REDIRECTION TO PROFILE WHEN LOGGED IN
   };
 
   const hashPassword = (password: string): string => {
@@ -45,8 +44,9 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="LoginContainer">
-      <h3>Login Form</h3>
+    <div className="LoginContainer bg-white shadow-sm rounded">
+      <h3>Login</h3>
+      <p>please sign-in with your e-mail and password:</p>
       <Form onFinish={handleLogin} initialValues={{ remember: true }} size="large">
         <Form.Item
           name="email"

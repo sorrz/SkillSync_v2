@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { About } from './Pages/About';
 import { Companies } from './Pages/Companies';
@@ -13,12 +13,13 @@ import { Profile } from './Pages/Profile';
 
 function App() {
   const [user, setUser] = useState<UserModel | null>(null);
-
+  const navigate = useNavigate();
   const handleLogin = (loggedInUser: UserModel) => {
     setUser(loggedInUser);
   };
 
   const handleLogout = () => {
+    navigate('/');
     setUser(null);
   };
 
