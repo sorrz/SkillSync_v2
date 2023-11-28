@@ -6,9 +6,9 @@ namespace Infrastructure.Repositories
     {
         public string GetOk();
         IEnumerable<CompanyModel>GetAllCompanies();
-        CompanyModel GetCompanyById(int id);
-        void AddCompany(CompanyModel company);
-        void UpdateCompany(CompanyModel company);
+        Task<CompanyModel> GetCompanyById(int id);
+        Task AddCompany(CompanyModel company);
+        Task UpdateCompany(CompanyModel company);
         void DeleteCompany(int id);
     }
 }

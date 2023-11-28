@@ -24,10 +24,11 @@ namespace Infrastructure.Repositories
             _logger = logger;
         }
 
-        public void AddCompany(CompanyModel company)
+        public async Task AddCompany(CompanyModel company)
         {
             _context.Companies.Add(company);
             _context.SaveChanges();
+
             _logger.LogInformation($"Company added: {company.Id} - {company.CompanyName}");
         }
 
@@ -59,9 +60,10 @@ namespace Infrastructure.Repositories
             return _context.Companies.ToList();
         }
 
-        public CompanyModel GetCompanyById(int id)
+        public async Task<CompanyModel> GetCompanyById(int id)
         {
-            return _context.Companies.SingleOrDefault(c => c.Id == id);
+            return await _context.Companies.FindAsync(id);
+            //return _context.Companies.FirstOrDefault(c => c.Id == id);
         }
 
         public string GetOk()
@@ -69,9 +71,9 @@ namespace Infrastructure.Repositories
             return "OK";
         }
 
-        public void UpdateCompany(CompanyModel company)
+        public async Task UpdateCompany(CompanyModel company)
         {
-            var existingCompany = _context.Companies.Find(company.Id);
+            var existingCompany = await _context.Companies.FindAsync(company.Id);
 
             if (existingCompany != null)
             {
@@ -86,23 +88,5 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public void RemoveCompany(int companyIdToRemove)
-        {
-           
-            var companyToRemove = _context.Companies.Find(companyIdToRemove);
-
-            if (companyToRemove != null)
-            {
-             
-                _context.Companies.Remove(companyToRemove);
-                _context.SaveChanges();
-                _logger.LogInformation($"Company removed: {companyIdToRemove}");
-            }
-            else
-            {
-                _logger.LogError($"Company with ID {companyIdToRemove} not found.");
-                throw new InvalidOperationException($"Company with ID {companyIdToRemove} not found.");
-            }
-        }
     }
 }

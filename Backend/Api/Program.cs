@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingService));
 builder.Services.AddTransient<IStudentRepository, StudentRepository>();
-
+builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 
 
 // Setup Logging
