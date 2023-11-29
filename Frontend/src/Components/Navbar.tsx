@@ -2,7 +2,7 @@ import { Container, Nav, Navbar as NavbarBS } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons'; // Import the Ant Design logout icon
-import { UserModel } from '../Models/UserModel';
+import { UserModel } from '../Models/StudentModel';
 import "../Styles/navbar.css";
 import logo from '../assets/dans_logo_png.png';
 import profile from '../assets/profil.png';

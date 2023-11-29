@@ -1,7 +1,7 @@
 // Login.tsx
 
 import { useState } from 'react';
-import { UserModel } from '../Models/UserModel';
+import { UserModel } from '../Models/StudentModel';
 import { Form, Input, Button, Space } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import '../Styles/login.css';

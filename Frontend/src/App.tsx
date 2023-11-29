@@ -8,13 +8,13 @@ import { Students } from './Pages/Students';
 import { Navbar } from './Components/Navbar';
 import { Login } from './Pages/Login';
 import Footer from './Components/Footer';
-import { UserModel } from './Models/UserModel';
+import StudentModel from './Models/StudentModel';
 import { Profile } from './Pages/Profile';
 
 function App() {
-  const [user, setUser] = useState<UserModel | null>(null);
+  const [user, setUser] = useState<StudentModel | null>(null);
   const navigate = useNavigate();
-  const handleLogin = (loggedInUser: UserModel) => {
+  const handleLogin = (loggedInUser: StudentModel) => {
     setUser(loggedInUser);
   };
 
