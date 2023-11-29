@@ -2,7 +2,7 @@ import { Container, Nav, Navbar as NavbarBS } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons'; // Import the Ant Design logout icon
-import { UserModel } from '../Models/StudentModel';
+import StudentModel from '../Models/StudentModel';
 import "../Styles/navbar.css";
 import logo from '../assets/dans_logo_png.png';
 import profile from '../assets/profil.png';
@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   isLoggedIn: boolean;
-  user: UserModel;
+  user: StudentModel;
   onLogout: () => void;
 }
 
 export function Navbar({ isLoggedIn, user, onLogout }: NavbarProps) {
   
-  const imgSrc = user?.imgURL || profile;
+  const imgSrc = user?.ImageUrl || profile;
   const navigate = useNavigate();
   const doLogOut = () => {
     onLogout();
@@ -60,13 +60,13 @@ export function Navbar({ isLoggedIn, user, onLogout }: NavbarProps) {
                 bottom: "30%", 
                 right: "-30%", 
                 transform: "translate(25%, 25%)",
-              }} onClick={doLogOut} icon={<LogoutOutlined />} />
+              }} onClick={doLogOut} icon={<LogoutOutlined />} data-testid="actionButton" />
             </div>
             </Nav.Link>
           </> 
         ) : (
           <Nav.Link to="/login" as={NavLink}>
-            <Button>Login</Button>
+            <Button data-testid="actionButton">Login</Button>
           </Nav.Link>
         )}
       </Container>

@@ -2,9 +2,7 @@ import { describe, expect, afterEach, test } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import CompanyItem from '../Components/CompanyItem';
 import { CompanyModel } from '../Models/CompanyModel';
-
-
-
+import { toHaveText } from './helpers'
 
   const mockCompany: CompanyModel = {
     id: 1,
@@ -25,11 +23,16 @@ import { CompanyModel } from '../Models/CompanyModel';
       cleanup();
     });
 
-  test('renders CompanyItem with correct content', async () => {
-  
-    render(<CompanyItem company={mockCompany} />);
+    test('renders CompanyItem with correct content', async () => {
+      render(<CompanyItem company={mockCompany} />);
+      expect(screen.getByTestId('card-id')).not.toBeNull();
+    });
+
+    test('renders CompanyItem with correct name', async () => {
+      render(<CompanyItem company={mockCompany} />);
+      const element = screen.getByTestId('name-id'); 
+      toHaveText(element, 'Test Company');
+    });
     
-    expect(screen.getByTestId('card-id')).not.toBeNull();
-    
-  });
+
 });

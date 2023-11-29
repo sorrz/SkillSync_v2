@@ -9,8 +9,12 @@ interface ConnectToProps {
 
 const ConnectToItem: React.FC<ConnectToProps> = ({ onLike, isLiked }) => {
   return (
-    <Button type="primary" icon={isLiked ? <HeartFilled /> : <HeartOutlined />} onClick={onLike}>
+    <Button type="primary" 
+    icon={isLiked ? <HeartFilled /> : <HeartOutlined />} 
+    onClick={onLike}
+    data-testid="connectButton">
       {isLiked ? 'You have shown interest in' : 'Click to Show interest in'}
+    
     </Button>
   );
 };

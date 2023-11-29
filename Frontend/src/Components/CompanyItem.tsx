@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
-import ConnectToItem from './connectToItem';
+import ConnectToItem from '../Components/ConnectToItem';
 import { CompanyModel } from '../Models/CompanyModel';
 
 interface CompanyItemProps {
@@ -15,7 +15,7 @@ const CompanyItem: React.FC<CompanyItemProps> = (props) => {
   };
 
   return (
-    <Card className="mb-4 border bg-light rounded shadow overflow-hidden">
+    <Card className="mb-4 border bg-light rounded shadow overflow-hidden" data-testid="card-id">
       {/* Image overlay */}
       <div
         className="position-relative"
@@ -25,7 +25,7 @@ const CompanyItem: React.FC<CompanyItemProps> = (props) => {
       >
         <div className="rounded shadow-sm position-absolute w-100 h-100 d-flex align-items-left"
         style={{height: '20vh'}}>
-        <Card.Title className="text-black text-center"><h1>{props.company.name}</h1></Card.Title>
+        <Card.Title className="text-black text-center" data-testid="name-id"><h1>{props.company.name}</h1></Card.Title>
       </div>
         <img
           src={props.company.imgURL}
