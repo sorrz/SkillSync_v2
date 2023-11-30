@@ -4,12 +4,12 @@ import axios from 'axios';
 
 const apiUrl =`${import.meta.env.VITE_API_URL}`;
 
-export const getAllCompanies =async () => {
+export const getAllCompanies = async () => {
     return await axios.get(apiUrl) //Add Location for Company Endpoint
     .then(response => response.data)
 }
 
-export const getCompanyById =async (id? : number) => {
+export const getCompanyById = async (id? : number) => {
     return await axios.get(apiUrl+`/${id}`) //Add Location for Company Endpoint
     .then(response => response.data)
 }
@@ -33,7 +33,6 @@ export const updateStudentById = async ( student : StudentModel ) => {
     return await axios.put(apiUrl, student)
     .then(response => response.data)
 }
-
 
 // SHOULD WE INCLUDE THEESE IN THE SERVICE CLASS? 
 export const deleteCompanyById = async ( id?: number ) => {
