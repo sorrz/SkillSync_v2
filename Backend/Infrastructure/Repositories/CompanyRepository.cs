@@ -24,6 +24,7 @@ namespace Infrastructure.Repositories
             _logger = logger;
         }
 
+        // TODO : chek up with the other AddCompany 
         public async Task AddCompany(CompanyModel company)
         {
             _context.Companies.Add(company);
@@ -32,7 +33,7 @@ namespace Infrastructure.Repositories
             _logger.LogInformation($"Company added: {company.Id} - {company.CompanyName}");
         }
 
-        public void DeleteCompany(int id)
+        public async Task DeleteCompany(int id)
         {
             try
             {
@@ -55,6 +56,7 @@ namespace Infrastructure.Repositories
             }
         }
 
+        // TODO : check with the other GetAllCompanies
         public IEnumerable<CompanyModel> GetAllCompanies()
         {
             return _context.Companies.ToList();
@@ -88,5 +90,14 @@ namespace Infrastructure.Repositories
             }
         }
 
+        Task<CompanyModel> ICompanyRepository.AddCompany(CompanyModel company)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<CompanyModel>> ICompanyRepository.GetAllCompanies()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

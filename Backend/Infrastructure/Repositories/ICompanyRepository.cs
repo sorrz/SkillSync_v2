@@ -5,10 +5,10 @@ namespace Infrastructure.Repositories
     public interface ICompanyRepository
     {
         public string GetOk();
-        IEnumerable<CompanyModel>GetAllCompanies();
+        Task<IEnumerable<CompanyModel>> GetAllCompanies();
         Task<CompanyModel> GetCompanyById(int id);
-        Task AddCompany(CompanyModel company);
+        Task<CompanyModel> AddCompany(CompanyModel company);
         Task UpdateCompany(CompanyModel company);
-        void DeleteCompany(int id);
+        Task DeleteCompany(int id);
     }
 }
