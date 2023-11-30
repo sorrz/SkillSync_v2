@@ -61,6 +61,7 @@ try
 }
 catch (Exception error)
 {
+    Console.WriteLine(error);
     // Throw Error
 }
 

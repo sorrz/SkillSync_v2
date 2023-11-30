@@ -27,8 +27,8 @@ namespace Infrastructure.Repositories
         // TODO : chek up with the other AddCompany 
         public async Task AddCompany(CompanyModel company)
         {
-            _context.Companies.Add(company);
-            _context.SaveChanges();
+            await _context.Companies.AddAsync(company);
+            await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Company added: {company.Id} - {company.CompanyName}");
         }
