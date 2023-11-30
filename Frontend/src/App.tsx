@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { About } from './Pages/About';
 import { Companies } from './Pages/Companies';
@@ -8,17 +8,18 @@ import { Students } from './Pages/Students';
 import { Navbar } from './Components/Navbar';
 import { Login } from './Pages/Login';
 import Footer from './Components/Footer';
-import { UserModel } from './Models/UserModel';
+import StudentModel from './Models/StudentModel';
 import { Profile } from './Pages/Profile';
 
 function App() {
-  const [user, setUser] = useState<UserModel | null>(null);
-
-  const handleLogin = (loggedInUser: UserModel) => {
+  const [user, setUser] = useState<StudentModel | null>(null);
+  const navigate = useNavigate();
+  const handleLogin = (loggedInUser: StudentModel) => {
     setUser(loggedInUser);
   };
 
   const handleLogout = () => {
+    navigate('/');
     setUser(null);
   };
 

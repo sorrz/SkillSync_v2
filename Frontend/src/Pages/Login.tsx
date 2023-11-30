@@ -1,7 +1,7 @@
 // Login.tsx
 
 import { useState } from 'react';
-import { UserModel } from '../Models/UserModel';
+import { UserModel } from '../Models/StudentModel';
 import { Form, Input, Button, Space } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import '../Styles/login.css';
@@ -37,7 +37,6 @@ export function Login({ onLogin }: LoginProps) {
     navigate('/profile');
     
     
-    // IMPLEMENT HANDLER FOR REDIRECTION TO PROFILE WHEN LOGGED IN
   };
 
   const hashPassword = (password: string): string => {
@@ -45,8 +44,9 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="LoginContainer">
-      <h3>Login Form</h3>
+    <div className="LoginContainer bg-white shadow-sm rounded">
+      <h3>Login</h3>
+      <p>please sign-in with your e-mail and password:</p>
       <Form onFinish={handleLogin} initialValues={{ remember: true }} size="large">
         <Form.Item
           name="email"
