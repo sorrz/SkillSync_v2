@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1701261863331" clover="3.2.0">
-  <project timestamp="1701261863331" name="All files">
+<coverage generated="1701432465632" clover="3.2.0">
+  <project timestamp="1701432465633" name="All files">
     <metrics statements="206" coveredstatements="204" conditionals="13" coveredconditionals="12" methods="7" coveredmethods="6" elements="226" coveredelements="222" complexity="0" loc="206" ncloc="206" packages="1" files="5" classes="5"/>
     <file name="CompanyItem.tsx" path="C:\Users\danst\source\repos\SkillSync_v2\Frontend\src\Components\CompanyItem.tsx">
       <metrics statements="58" coveredstatements="56" conditionals="1" coveredconditionals="1" methods="2" coveredmethods="1"/>

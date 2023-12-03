@@ -1,8 +1,10 @@
-﻿using AutoMapper;
-using Backend.Dtos;
+﻿using Api.Dtos;
+using AutoMapper;
 using Entity.Models;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.ComponentModel.Design;
 
 namespace Api.Controllers
 {
@@ -21,29 +23,20 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetHealthCompany")]
-        public string GetHealth()
-        {
-            return $"Company ok @ {DateTime.Now.ToLocalTime()}";
-        }
-
-        [HttpGet(Name ="GetCompanyById")]
-        public async Task<IActionResult> GetCompanyById(int companyId)
+  
+        [HttpGet("{Id}", Name = "GetCompanyById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CompanyDto>> GetCompanyById(int Id)
         {
             try
             {
-                if (!ModelState.IsValid || companyId <= 0)
-                {
-                    _logger.LogInformation($"Invalid companyId provided: {companyId}");
-                    return BadRequest("Invalid companyId provided.");
-                } 
-
-                var company = await _companyRepository.GetCompanyById(companyId);
-
+                
+                var company = await _companyRepository.GetCompanyById(Id);
                 if (company == null)
                 {
-                    _logger.LogInformation($"Company with ID {companyId} not found.");
-                    return NotFound($"Company with ID {companyId} not found.");
+                    _logger.LogInformation($"Company with ID {Id} not found.");
+                    return NotFound($"Company with ID {Id} not found.");
                 }
 
                 var companyDto = _mapper.Map<CompanyDto>(company);
@@ -51,20 +44,28 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error while retrieving company with ID {companyId}: {ex.Message}");
+                _logger.LogError($"Error while retrieving company with ID {Id}: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
 
-        [HttpGet(Name ="GetAll")]
-        public async Task<IActionResult> GetAllCompanies()
+        [HttpGet(Name = "GetAll")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<CompanyDto>>> GetAllCompanies()
         {
             try
             {
                 var companies = await _companyRepository.GetAllCompanies();
-                var mappedCompanies = _mapper.Map<IEnumerable<CompanyModel>>(companies);
+                if (companies == null || companies.Count == 0)
+                {
+                    _logger.LogInformation($"No companies where found.");
+                    return NotFound($"No companies where found.");
+                }
 
+                var mappedCompanies = _mapper.Map<List<CompanyDto>>(companies);
                 return Ok(mappedCompanies);
+
             }
             catch (Exception ex)
             {
@@ -74,41 +75,40 @@ namespace Api.Controllers
         }
 
         [HttpPost(Name = "RegisterCompany")]
-        public async Task<IActionResult> AddCompany(CompanyDto companyDto)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CompanyModel>> AddCompany(CompanyModel company)
         {
-            if (companyDto == null)
+            if (company == null)
             {
-                _logger.LogError("Company DTO is null.");
-                return BadRequest("Company DTO is null.");
+                _logger.LogError("Company is null.");
+                return BadRequest("Company is null.");
             }
 
-            var newCompanyModel = _mapper.Map<CompanyModel>(companyDto);
-            await _companyRepository.AddCompany(newCompanyModel);
+            var createdCompany = await _companyRepository.AddCompany(company);
 
-            return CreatedAtAction("GetCompanyById", new { id = newCompanyModel.Id }, newCompanyModel);
+            return CreatedAtAction("GetCompanyById", new { id = createdCompany.Id }, createdCompany);
         }
 
-        [HttpPut(Name =" EditCOmpany")]
-        public async Task<IActionResult> EditCompany(int companyId, CompanyDto updatedCompanyDto)
+        [HttpPut(Name = "EditCompany")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<CompanyDto>> EditCompany(int companyId, CompanyDto newCompanyDto)
         {
             try
             {
-                var existingCompany = await _companyRepository.GetCompanyById(companyId);
-
-                if (existingCompany == null)
+                if (newCompanyDto == null)
                 {
-                    _logger.LogInformation($"Company with ID {companyId} not found.");
-                    return NotFound($"Company with ID {companyId} not found.");
+                    _logger.LogInformation($"Faulty Dto from Frontend, no company information found");
+                    return NoContent();
                 }
 
-                _mapper.Map(updatedCompanyDto, existingCompany);
-
-                
-                await _companyRepository.UpdateCompany(existingCompany);
+                var newCompanyModel = _mapper.Map<CompanyModel>(newCompanyDto);
+                var updatedCompanyModel = await _companyRepository.UpdateCompany(newCompanyModel);
 
                 _logger.LogInformation($"Company with ID {companyId} updated successfully.");
 
-                return NoContent();
+                return Ok(_mapper.Map<CompanyDto>(updatedCompanyModel));
             }
             catch (Exception ex)
             {
@@ -117,29 +117,20 @@ namespace Api.Controllers
             }
         }
 
-        [HttpDelete(Name ="DeleteCompany")]
-        public async Task<IActionResult> DeleteCompany(int companyId)
+        [HttpDelete(Name = "DeleteCompany")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteCompanyById(int companyId)
         {
-            try
+            var result = await _companyRepository.DeleteCompanyById(companyId);
+            if (result == false)
             {
-                var existingCompany = await _companyRepository.GetCompanyById(companyId);
-                if (existingCompany == null)
-                {
-                    _logger.LogInformation($"Company with ID {companyId} not found.");
-                    return NotFound();
-                }
-
-                _companyRepository.DeleteCompany(companyId);
-
-                _logger.LogInformation($"Company with ID {companyId} deleted successfully.");
-
-                return NoContent();
+                _logger.LogInformation($"No Company with ID {companyId} found!");
+                return NotFound($"No Company with ID {companyId} found!");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error deleting company with ID {companyId}: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+
+            _logger.LogInformation($"Company with ID {companyId} removed successfully!");
+            return Ok($"Company with ID {companyId} removed successfully!");
         }
 
 

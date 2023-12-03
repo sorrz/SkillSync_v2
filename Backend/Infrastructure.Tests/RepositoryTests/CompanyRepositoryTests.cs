@@ -4,213 +4,208 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Infrastructure.Tests.RepositoryTests
 {
     public class CompanyRepositoryTests
     {
-        private CompanyRepository _sut;
-        private Mock<AppDbContext> _mockDbContext;
-        private Mock<DbSet<CompanyModel>> _mockCompanies;
-        private Mock<ILogger<CompanyRepository>> _mockLogger;
+
+        private readonly Mock<ILogger<CompanyRepository>> _logger;
+        private readonly CompanyRepository _sut;
+
         public CompanyRepositoryTests()
         {
-            _mockDbContext = new Mock<AppDbContext>();
-            _mockCompanies = new Mock<DbSet<CompanyModel>>();
-            _mockLogger = new Mock<ILogger<CompanyRepository>>();
+            _logger = new Mock<ILogger<CompanyRepository>>();
 
-            _mockDbContext.Setup(c => c.Companies).Returns(_mockCompanies.Object);
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
 
-            _sut = new CompanyRepository(_mockDbContext.Object, _mockLogger.Object);
-        }
-        [Fact]
-        public void Should_MatchTypeOf_Repository()
-        {
-            //arrange
-            var sut = _sut.GetType();
-
-            //assert
-            Assert.Equal(typeof(CompanyRepository), sut);
+            var dbContext = new AppDbContext(options);
+            _sut = new CompanyRepository(dbContext, _logger.Object);
         }
 
-        [Fact]
-        public void ShouldReturn_OK_FromGetOK()
-        {
-            //arrange
-            var expected = "OK";
 
-            //act
-            var result = _sut.GetOk();
-
-            //assert
-            Assert.Equal(expected, result);
-        }
+        #region AddCompany
 
         [Fact]
-        public void Should_ReturnEmptyList_WhenNoCompaniesExist()
+        public async Task Should_AddCompany_AndReturnModel()
         {
-            // arrange
-            var companiesData = new List<CompanyModel>();
-            var mockCompanies = new Mock<DbSet<CompanyModel>>();
+            // Arrange
+            var companyId = 1;
+            var newCompany = GetCompanyWithId(companyId);
 
-            // Set up IQueryable 
-            mockCompanies.As<IQueryable<CompanyModel>>().Setup(m => m.Provider).Returns(companiesData.AsQueryable().Provider);
-            mockCompanies.As<IQueryable<CompanyModel>>().Setup(m => m.Expression).Returns(companiesData.AsQueryable().Expression);
-            mockCompanies.As<IQueryable<CompanyModel>>().Setup(m => m.ElementType).Returns(companiesData.AsQueryable().ElementType);
-            mockCompanies.As<IQueryable<CompanyModel>>().Setup(m => m.GetEnumerator()).Returns(() => companiesData.AsQueryable().GetEnumerator());
 
-            _mockDbContext.Setup(c => c.Companies).Returns(mockCompanies.Object);
-
-            //act
-            var companies = _sut.GetAllCompanies();
-
-            //assert
-            Assert.Empty(companies);
-        }
-
-        [Fact]
-        public async Task Should_AddCompany_WhenCompanyIsCalled()
-        {
-            //arrange
-            var newCompany = new CompanyModel
-            {
-                Id = 1,
-                CompanyName = "Test",
-                ContactName = "Sven Svenson",
-                ContactPhone = " 0730858655",
-                ContactMail = "sven@iver.com",
-                PasswordHash = "svensonthebest",
-                TechStack = ["C#", "Java"],
-                Mentorship = true,
-                Lia1Spots = 1,
-                Lia2Spots = 2,
-                HasExjob = false,
-                Presentation = "one two three",
-                ImageUrl = "test"
-            };
-
-                        _mockCompanies.Setup(c => c.FindAsync(newCompany.Id))
-            .ReturnsAsync(newCompany); // Set up the FindAsync to return the newCompany when called with companyId
-
-                        _mockDbContext.Setup(c => c.Companies)
-                            .Returns(_mockCompanies.Object);
-
-            //act
+            // Act
             await _sut.AddCompany(newCompany);
 
-            // assert
+            // Assert
             var addedCompany = await _sut.GetCompanyById(newCompany.Id);
             Assert.NotNull(addedCompany);
             Assert.Equal(newCompany.CompanyName, addedCompany.CompanyName);
         }
 
+        #endregion
+
+        #region DeleteCompany
+
+        [Fact]
+        public async Task Should_DeleteCompany_WhenDeleteCompanyByIdIsCalled()
+        {
+            // Arrange
+            var companyIdToDelete = 4;
+            var companyToDelete = GetCompanyWithId(companyIdToDelete);
+
+            await _sut.AddCompany(companyToDelete);
+
+            // Act
+            var result = await _sut.DeleteCompanyById(companyIdToDelete);
+
+            // Assert
+            Assert.True(result);
+
+            var deletedCompany = await _sut.GetCompanyById(companyIdToDelete);
+            Assert.Null(deletedCompany);
+        }
+
+        [Fact]
+        public async Task Should_ReturnFalse_WhenDeleteNonexistentCompanyByIdIsCalled()
+        {
+            // Arrange
+            var nonexistentCompanyId = 999;
+
+            // Act
+            var result = await _sut.DeleteCompanyById(nonexistentCompanyId);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        #endregion
+
+        #region GetByCompanyId
+
+        [Fact]
+        public async Task Should_ReturnCompany_WhenGetCompanyByIdIsCalled()
+        {
+            // Arrange
+            var companyId = 2;
+            var company = GetCompanyWithId(companyId);
+
+            await _sut.AddCompany(company);
+
+            // Act
+            var result = await _sut.GetCompanyById(companyId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(companyId, result.Id);
+        }
+
+        [Fact]
+        public async Task Should_ReturnNull_WhenGetNonexistentCompanyByIdIsCalled()
+        {
+            // Arrange
+            var nonexistentCompanyId = 999;
+
+            // Act
+            var result = await _sut.GetCompanyById(nonexistentCompanyId);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        #endregion
+
+        #region UpdateCompany
+
         [Fact]
         public async Task Should_UpdateCompany_WhenUpdateCompanyIsCalled()
         {
-            //arrange
-            var companyId = 1;
-            var newCompany = new CompanyModel
-            {
-                Id = 1,
-                CompanyName = "Test",
-                ContactName = "Sven Svenson",
-                ContactPhone = " 0730858655",
-                ContactMail = "sven@iver.com",
-                PasswordHash = "svensonthebest",
-                TechStack = ["C#", "Java"],
-                Mentorship = true,
-                Lia1Spots = 1,
-                Lia2Spots = 2,
-                HasExjob = false,
-                Presentation = "one two three",
-                ImageUrl = "test"
-            };
+            // Arrange
+            var companyId = 3;
+            var nameToVerify = "Ture Svenson";
 
-            var updatedCompany = new CompanyModel
-            {
-                Id = 1,
-                CompanyName = "Test",
-                ContactName = "Arne Svenson",
-                ContactPhone = " 0730858655",
-                ContactMail = "sven@iver.com",
-                PasswordHash = "svensonthebest",
-                TechStack = ["C#", "Java"],
-                Mentorship = true,
-                Lia1Spots = 1,
-                Lia2Spots = 2,
-                HasExjob = false,
-                Presentation = "one two three",
-                ImageUrl = "test"
-            };
+            var originalCompany = GetCompanyWithId(companyId);
+            var updatedCompany = GetCompanyWithIdAndName(companyId, nameToVerify);
 
-            _mockCompanies.Setup(c => c.FindAsync(newCompany.Id))
-        .ReturnsAsync(newCompany); // Set up the FindAsync to return the newCompany when called with companyId
+            await _sut.AddCompany(originalCompany);
 
-            _mockDbContext.Setup(c => c.Companies)
-                .Returns(_mockCompanies.Object);
+            // Act
+            var result = await _sut.UpdateCompany(updatedCompany);
 
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(companyId, result.Id);
+            Assert.Equal(nameToVerify, result.ContactName);
 
-            //act
-            await _sut.AddCompany(newCompany);
-            await _sut.UpdateCompany(updatedCompany);
-
-            //assert
-            var retrievedCompany = await _sut.GetCompanyById(companyId);
-            Assert.NotNull(retrievedCompany);
-            Assert.Equal(updatedCompany.CompanyName, retrievedCompany.CompanyName);
+            var updatedCompanyInDatabase = await _sut.GetCompanyById(companyId);
+            Assert.NotNull(updatedCompanyInDatabase);
+            Assert.Equal(nameToVerify, updatedCompanyInDatabase.ContactName);
         }
 
         [Fact]
-        public void Shoudl_DeleteCompany_WhenDeleteCompanyIsCalled()
+        public async Task Should_ThrowException_WhenUpdateNonexistentCompanyIsCalled()
         {
-            //arrange
-            var companyIdToDelete = 1;
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
-                .Options;
-
-            using (var dbContext = new AppDbContext(options))
+            // Arrange
+            var nonexistentCompanyId = 999;
+            var nonexistentCompany = new CompanyModel
             {
-                var companyToDelete = new CompanyModel
-                {
-                    Id = 1,
-                    CompanyName = "Test",
-                    ContactName = "Sven Svenson",
-                    ContactPhone = " 0730858655",
-                    ContactMail = "sven@iver.com",
-                    PasswordHash = "svensonthebest",
-                    TechStack = ["C#", "Java"],
-                    Mentorship = true,
-                    Lia1Spots = 1,
-                    Lia2Spots = 2,
-                    HasExjob = false,
-                    Presentation = "one two three",
-                    ImageUrl = "test"
-                };
-                dbContext.Companies.Add(companyToDelete);
-                dbContext.SaveChanges();
+                Id = nonexistentCompanyId,
+                CompanyName = "NonexistentCompany",
+                // ... (other properties)
+            };
 
-                var mockLogger = new Mock<ILogger<CompanyRepository>>();
-                var repository = new CompanyRepository(dbContext, mockLogger.Object);
-
-                //act
-                repository.DeleteCompany(companyIdToDelete);
-
-                //assert
-                // mockLogger.Verify(
-                // x => x.LogError(It.IsAny<string>()),
-                // Times.Never);
-
-                var deletedCompany = dbContext.Companies.FirstOrDefault(c => c.Id == companyIdToDelete);
-                Assert.Null(deletedCompany);
-            }
+            // Act and Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.UpdateCompany(nonexistentCompany));
         }
 
+        #endregion
+
+        #region Helpers
+
+        private static CompanyModel GetCompanyWithId(int id)
+        {
+            return new CompanyModel
+            {
+                Id = id,
+                CompanyName = "Test",
+                ContactName = "Ture Svenson",
+                ContactPhone = " 0730858655",
+                ContactMail = "sven@iver.com",
+                PasswordHash = "svensonthebest",
+                TechStack = ["C#", "Java"],
+                Mentorship = true,
+                Lia1Spots = 1,
+                Lia2Spots = 2,
+                HasExjob = false,
+                Presentation = "one two three",
+                ImageUrl = "test"
+            };
+        }
+
+        private static CompanyModel GetCompanyWithIdAndName(int id, string name)
+        {
+            return new CompanyModel
+            {
+                Id = id,
+                CompanyName = "Test",
+                ContactName = name,
+                ContactPhone = " 0730858655",
+                ContactMail = "sven@iver.com",
+                PasswordHash = "svensonthebest",
+                TechStack = ["C#", "Java"],
+                Mentorship = true,
+                Lia1Spots = 1,
+                Lia2Spots = 2,
+                HasExjob = false,
+                Presentation = "one two three",
+                ImageUrl = "test"
+            };
+        }
+
+        #endregion
 
     }
 }
