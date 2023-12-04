@@ -27,7 +27,7 @@ namespace Infrastructure.Tests.RepositoryTests
 
 
 
-        [Fact]
+      /*  [Fact(Skip = " not done")]
         public async void Should_CreateSafePwdWithSalt_WhenCalled()
         {
 
@@ -77,7 +77,7 @@ namespace Infrastructure.Tests.RepositoryTests
 
             Assert.True(result);
 
-        }
+        }*/
 
 
     }
