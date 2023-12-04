@@ -1,4 +1,4 @@
-﻿using Api.Dtos;
+﻿using Entity.Dtos;
 using AutoMapper;
 using Entity.Models;
 using Infrastructure.Repositories;
