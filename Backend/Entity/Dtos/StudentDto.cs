@@ -1,4 +1,4 @@
-﻿namespace Api.Dtos
+﻿namespace Entity.Dtos
 {
     public class StudentDto
     {

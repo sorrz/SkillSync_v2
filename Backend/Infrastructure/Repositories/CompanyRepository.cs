@@ -2,13 +2,7 @@
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Moq;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Infrastructure.Repositories
 {
@@ -24,30 +18,25 @@ namespace Infrastructure.Repositories
             _logger = logger;
         }
 
-        // TODO : chek up with the other AddCompany 
-        public async Task AddCompany(CompanyModel company)
+        public async Task<CompanyModel> AddCompany(CompanyModel company)
         {
             await _context.Companies.AddAsync(company);
             await _context.SaveChangesAsync();
-
             _logger.LogInformation($"Company added: {company.Id} - {company.CompanyName}");
+            return company;
         }
 
-        public async Task DeleteCompany(int id)
+        public async Task<bool> DeleteCompanyById(int id)
         {
             try
             {
-                var companyToDelete = _context.Companies.Find(id);
+                var companyToDelete = await _context.Companies.FindAsync(id);
+                if (companyToDelete == null) return false;
 
-                if (companyToDelete != null)
-                {
-                    _context.Companies.Remove(companyToDelete);
-                    _context.SaveChanges();
-                }
-                else
-                {
-                    _logger.LogWarning($"Company with ID {id} not found during delete.");
-                }
+                _context.Companies.Remove(companyToDelete);
+                _context.SaveChanges();
+                return true;        
+               
             }
             catch (Exception ex)
             {
@@ -56,48 +45,34 @@ namespace Infrastructure.Repositories
             }
         }
 
-        // TODO : check with the other GetAllCompanies
-        public IEnumerable<CompanyModel> GetAllCompanies()
-        {
-            return _context.Companies.ToList();
-        }
+        public async Task<List<CompanyModel?>> GetAllCompanies() => await _context.Companies.ToListAsync();
 
-        public async Task<CompanyModel> GetCompanyById(int id)
-        {
-            return await _context.Companies.FindAsync(id);
-            //return _context.Companies.FirstOrDefault(c => c.Id == id);
-        }
+        public async Task<CompanyModel?> GetCompanyById(int companyId) => await _context.Companies.FindAsync(companyId);
 
-        public string GetOk()
+        public async Task<CompanyModel> UpdateCompany(CompanyModel company)
         {
-            return "OK";
-        }
-
-        public async Task UpdateCompany(CompanyModel company)
-        {
-            var existingCompany = await _context.Companies.FindAsync(company.Id);
-
-            if (existingCompany != null)
+            try
             {
-                existingCompany.CompanyName = company.CompanyName;
-                _context.SaveChanges();
-                _logger.LogInformation($"Company updated: {company.Id} - {company.CompanyName}");
+                var existingCompany = await _context.Companies.FindAsync(company.Id);
+
+                if (existingCompany == null)
+                {
+                    _logger.LogError($"Company with ID {company.Id} not found.");
+                    throw new InvalidOperationException($"Company with ID {company.Id} not found.");
+                }
+
+                _context.Entry(existingCompany).CurrentValues.SetValues(company);
+                await _context.SaveChangesAsync();
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogError($"Company with ID {company.Id} not found.");
-                throw new InvalidOperationException($"Company with ID {company.Id} not found.");
+                _logger.LogError($"An error occurred while updating company with ID {company.Id}: {ex.Message}");
+                throw;
             }
+
+            return await GetCompanyById(company.Id);
         }
 
-        Task<CompanyModel> ICompanyRepository.AddCompany(CompanyModel company)
-        {
-            throw new NotImplementedException();
-        }
 
-        Task<IEnumerable<CompanyModel>> ICompanyRepository.GetAllCompanies()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
