@@ -9,6 +9,6 @@ namespace Infrastructure.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public AppDbContext() { }
         public virtual DbSet<StudentModel> Students { get; set; }
-        public virtual DbSet<CompanyModel> Companies { get; set; }
+        public virtual DbSet<StudentModel> Companies { get; set; }
     }
 }

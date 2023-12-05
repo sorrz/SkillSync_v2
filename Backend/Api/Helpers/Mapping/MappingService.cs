@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Entity.Dtos;
+using Api.Dtos;
 using Entity.Models;
 
 namespace Api.Helpers.Mapping;

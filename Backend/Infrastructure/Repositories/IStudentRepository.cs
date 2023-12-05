@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.Models;
 
 namespace Infrastructure.Repositories
 {
     public interface IStudentRepository
     {
-        public string GetOk();
+        Task<StudentModel> AddStudent(StudentModel student);
+        Task<bool> DeleteStudentById(int id);
+        Task<StudentModel?> GetStudentById(int id);
+        Task<List<StudentModel?>> GetStudents();
+        Task<StudentModel> UpdateStudent(StudentModel student);
     }
 }

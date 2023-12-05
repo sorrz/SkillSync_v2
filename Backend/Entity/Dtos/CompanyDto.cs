@@ -1,4 +1,4 @@
-﻿namespace Entity.Dtos
+﻿namespace Api.Dtos
 {
     public class CompanyDto
     {
