@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class NewDatabaseModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,6 +44,7 @@ namespace Infrastructure.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     MailAddress = table.Column<string>(type: "TEXT", nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
+                    StudentSalt = table.Column<string>(type: "TEXT", nullable: false),
                     TechStack = table.Column<string>(type: "TEXT", nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     Graduation = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -52,7 +53,9 @@ namespace Infrastructure.Migrations
                     StartLia2 = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndLia2 = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Presentation = table.Column<string>(type: "TEXT", nullable: false),
-                    ImageUrl = table.Column<string>(type: "TEXT", nullable: false)
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: false),
+                    ConnectedTo = table.Column<string>(type: "TEXT", nullable: false),
+                    LinkedInProfile = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

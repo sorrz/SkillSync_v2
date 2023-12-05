@@ -13,10 +13,5 @@ namespace Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetHealth")]
-        public string GetHealth()
-        {
-            return $"Ok @ {DateTime.Now.ToLocalTime()}";
-        }
     }
 }
