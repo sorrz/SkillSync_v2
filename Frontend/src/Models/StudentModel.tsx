@@ -1,4 +1,3 @@
-// StudentModel.tsx
 
 interface StudentModel {
   Id: number;
