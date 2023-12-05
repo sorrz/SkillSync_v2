@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public string MailAddress { get; set; }
         public string PasswordHash { get; set; }
+        public string StudentSalt { get; set; }
         public List<string> TechStack { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime Graduation { get; set; }

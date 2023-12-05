@@ -63,7 +63,7 @@ namespace Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex) 
-            {
+        {
                 _logger.LogError(ex, $"Error while trying to update student whit id {student.Id}", student.Id);
                 throw;
             }

@@ -1,0 +1,18 @@
+/* Login.css */
+
+.LoginContainer {
+    position: relative;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 50px;
+    background: url('../assets/dans_logo_png.png') no-repeat center center;
+    background-size: cover;
+    padding: 20px;
+  }
+  
+  .LoginContainer h3 {
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    color: #000;;
+  }

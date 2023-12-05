@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 # Development Appsettings
 appsettings.Development.json
+Frontend/.env

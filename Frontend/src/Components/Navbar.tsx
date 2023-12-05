@@ -1,36 +1,75 @@
-import { Container, Nav, Navbar as NavbarBS } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import { Button } from "antd";
-import { UserModel } from "../Models/UserModel";
-
+import { Container, Nav, Navbar as NavbarBS } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { Button } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons'; // Import the Ant Design logout icon
+import StudentModel from '../Models/StudentModel';
+import "../Styles/navbar.css";
+import logo from '../assets/dans_logo_png.png';
+import profile from '../assets/profil.png';
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
-    isLoggedIn: boolean;
-    user: UserModel;
+  isLoggedIn: boolean;
+  user: StudentModel;
+  onLogout: () => void;
 }
 
-export function Navbar({ isLoggedIn, user }: NavbarProps) {
-    const imgSrc = user?.imgURL || "https://www.svgbackgrounds.com/wp-content/uploads/2021/07/slanted-halftone-subtle-background-graphic.jpg"; // Replace "solid-color-url" with your actual URL or color
+export function Navbar({ isLoggedIn, user, onLogout }: NavbarProps) {
+  
+  const imgSrc = user?.ImageUrl || profile;
+  const navigate = useNavigate();
+  const doLogOut = () => {
+    onLogout();
+    navigate('/')
+  };
 
-    return (
-        <NavbarBS sticky="top" className="bg-white shadow-sm mb-3">
-            <Container>
-                <Nav className="me-auto">
-                    <Nav.Link to="/" as={NavLink} > Home </Nav.Link>
-                    <Nav.Link to="/companies" as={NavLink} > Companies </Nav.Link>
-                    <Nav.Link to="/students" as={NavLink} > Students </Nav.Link>
-                    <Nav.Link to="/about" as={NavLink} > About </Nav.Link>
-                </Nav>
-                {isLoggedIn ? (
-                    <Nav.Link to="/profile" as={NavLink}>
-                        <img src={imgSrc} alt="Profile" className="profile-picture" />
-                    </Nav.Link>
-                ) : (
-                    <Nav.Link to="/login" as={NavLink}>
-                        <Button>Login</Button>
-                    </Nav.Link>
-                )}
-            </Container>
-        </NavbarBS>
-    );
+  return (
+    <NavbarBS sticky="top" className="bg-white shadow-sm mb-3">
+      <Container>
+        <div className="NavLinkContainer mx-1">
+          <img style={{ width: "3rem", height: "3rem"}} src={logo} alt="SkillSync" />
+        </div>
+        <Nav className="me-auto">
+          <Nav.Link to="/" as={NavLink} className="NavLinkContainer">
+          <span className="NavLinkText">Home</span>
+            <div className="NavLinkBackground"></div>
+          </Nav.Link>
+          <Nav.Link to="/companies" as={NavLink} className="NavLinkContainer">
+          <span className="NavLinkText">Companies</span>
+            <div className="NavLinkBackground"></div>
+          </Nav.Link>
+          <Nav.Link to="/students" as={NavLink} className="NavLinkContainer">
+          <span className="NavLinkText">Students</span>
+            <div className="NavLinkBackground"></div>
+          </Nav.Link>
+          <Nav.Link to="/about" as={NavLink} className="NavLinkContainer">
+          <span className="NavLinkText">About</span>
+            <div className="NavLinkBackground"></div>
+          </Nav.Link>
+        </Nav>
+        {isLoggedIn ? (
+          <>
+            <Nav.Link to="/profile" as={NavLink}>
+              <div style={{ position: "relative"}}>
+              <img src={imgSrc} style={{ height: '3rem', width: '3rem', borderRadius: '50%', objectFit: 'cover' }} alt="Profile" className="profile-picture" /> 
+              <Button className="logOutCircle rounded-circle d-flex justify-content-center align-items-center" 
+                style={{  
+                width: "2rem", 
+                height: "2rem", 
+                position: "absolute", 
+                bottom: "30%", 
+                right: "-30%", 
+                transform: "translate(25%, 25%)",
+              }} onClick={doLogOut} icon={<LogoutOutlined />} data-testid="actionButton" />
+            </div>
+            </Nav.Link>
+          </> 
+        ) : (
+          <Nav.Link to="/login" as={NavLink}>
+            <Button data-testid="actionButton">Login</Button>
+          </Nav.Link>
+        )}
+      </Container>
+    </NavbarBS>
+  );
 }
