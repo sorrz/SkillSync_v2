@@ -47,7 +47,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet(Name = "GetAll")]
+        [HttpGet(Name = "GetAllCompanies")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<CompanyDto>>> GetAllCompanies()
