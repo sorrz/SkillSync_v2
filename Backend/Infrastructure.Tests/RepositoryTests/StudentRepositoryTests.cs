@@ -17,13 +17,5 @@ namespace Infrastructure.Tests.RepositoryTests
             _appDbContextMock = new Mock<AppDbContext>();
             _sut = new StudentRepository(_appDbContextMock.Object, _loggerMock.Object);
         }
-        #region AddStudent
-        //[fact]
-        //public
-        #endregion
-        }
-
-
-
     }
 }

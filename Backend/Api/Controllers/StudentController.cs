@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Api.Dtos;
+using Entity.Dtos;
 using Entity.Models;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;

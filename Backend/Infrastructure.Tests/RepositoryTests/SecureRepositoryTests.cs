@@ -18,6 +18,7 @@ namespace Infrastructure.Tests.RepositoryTests
         public SecureRepositoryTests()
         {
             _logger = new Mock<ILogger<SecureRepository>>();
+            var studentLogger = new Mock<ILogger<StudentRepository>>();
 
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -25,8 +26,8 @@ namespace Infrastructure.Tests.RepositoryTests
 
             dbContext = new AppDbContext(options);
             _sut = new SecureRepository(dbContext, _logger.Object);
-            _studentRepository = new StudentRepository();
-            
+            _studentRepository = new StudentRepository(dbContext, studentLogger.Object);
+
 
         }
 
@@ -102,21 +103,22 @@ namespace Infrastructure.Tests.RepositoryTests
         {
             return new StudentModel
             {
-
                 Id = id,
                 Name = "John Doe",
                 MailAddress = "john.doe@example.com",
                 PasswordHash = "",
                 StudentSalt = "",
-                TechStack = new List<string> { "C#", "ASP.NET", "JavaScript" },
+                TechStack = new List<string> { "C#", "ASP.NET", "SQL" },
                 PhoneNumber = "123-456-7890",
-                Graduation = DateTime.Parse("2023-12-31"),
-                StartLia1 = DateTime.Parse("2023-01-01"),
-                EndLia1 = DateTime.Parse("2023-06-30"),
-                StartLia2 = DateTime.Parse("2023-07-01"),
-                EndLia2 = DateTime.Parse("2023-12-31"),
-                Presentation = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                ImageUrl = "https://example.com/john_doe_image.jpg"
+                Graduation = DateTime.Now.AddYears(1),
+                StartLia1 = DateTime.Now.AddMonths(3),
+                EndLia1 = DateTime.Now.AddMonths(6),
+                StartLia2 = DateTime.Now.AddMonths(9),
+                EndLia2 = DateTime.Now.AddYears(1),
+                Presentation = "Test presentation content",
+                ImageUrl = "https://example.com/image.jpg",
+                ConnectedTo = new List<string> { "Friend1", "Friend2" },
+                LinkedInProfile = "https://www.linkedin.com/in/johndoe"
             };
         }
        

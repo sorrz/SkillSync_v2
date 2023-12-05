@@ -1,6 +1,6 @@
 ﻿using Api.Controllers;
 using AutoMapper;
-using Api.Dtos;
+using Entity.Dtos;
 using Entity.Models;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -306,17 +306,21 @@ namespace Api.Tests.ApiControllerTests
         {
             return new StudentDto
             {
-                Id = id,
+                Id = 1,
                 Name = "John Doe",
                 MailAddress = "john.doe@example.com",
-                TechStack = new List<string> { "C#", "Java", "Python" },
+                PasswordHash = "hashed_password",
+                TechStack = new List<string> { "C#", "ASP.NET", "SQL" },
                 PhoneNumber = "123-456-7890",
-                StartLia1 = new DateTime(2023, 1, 15),
-                EndLia1 = new DateTime(2023, 4, 15),
-                StartLia2 = new DateTime(2023, 6, 1),
-                EndLia2 = new DateTime(2023, 9, 1),
-                Presentation = "This is my presentation.",
-                ImageUrl = "https://example.com/john_doe.jpg"
+                Graduation = new DateTime(2023, 12, 31),
+                Lia1Start = new DateTime(2023, 1, 1),
+                Lia1End = new DateTime(2023, 6, 30),
+                Lia2Start = new DateTime(2023, 7, 1),
+                Lia2End = new DateTime(2023, 12, 31),
+                Presentation = "Tech Presentation",
+                ImageUrl = "https://example.com/image.jpg",
+                ConnectedTo = new List<string> { "Friend1", "Friend2" },
+                LinkedInProfile = "https://www.linkedin.com/in/johndoe"
             };
         }
         private StudentModel GetStudent(int id)
