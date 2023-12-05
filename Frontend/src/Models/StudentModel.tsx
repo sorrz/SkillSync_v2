@@ -15,6 +15,7 @@ interface StudentModel {
   Presentation: string;
   ImageUrl: string;
   connectedTo: string[];
+  LinkedInProfile : string;
 }
 
 export default StudentModel;
