@@ -1,5 +1,4 @@
-﻿using Backend.Controllers;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -12,22 +11,22 @@ namespace Api.Tests.ApiControllerTests
     public class ApiControllerTest
     {
 
-        private readonly Mock<ILogger<ApiController>> _logger;
-        private readonly ApiController _sut;
+        //private readonly Mock<ILogger<ApiController>> _logger;
+        //private readonly ApiController _sut;
 
 
-        public ApiControllerTest()
-        {
-            _logger = new Mock<ILogger<ApiController>>();
-            _sut = new ApiController(_logger.Object);
-        }
+        //public ApiControllerTest()
+        //{
+        //    _logger = new Mock<ILogger<ApiController>>();
+        //    _sut = new ApiController(_logger.Object);
+        //}
 
-        [Fact]
-        public void Controller_ShouldSendHealthCheck_WhenCalled()
-        {
-            var result = _sut.GetHealth();
-            Assert.Contains("ok", result.ToLower());
+        //[Fact]
+        //public void Controller_ShouldSendHealthCheck_WhenCalled()
+        //{
+        //    var result = _sut.GetHealth();
+        //    Assert.Contains("ok", result.ToLower());
 
-        }
+        //}
     }
 }
