@@ -1,18 +1,8 @@
-﻿using AutoMapper;
-using Entity.Dtos;
-using Entity.Models;
+﻿using Entity.Models;
 using Infrastructure.Context;
 using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SQLitePCL;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Infrastructure.Repositories
 {
@@ -43,17 +33,6 @@ namespace Infrastructure.Repositories
 
             return true;
         }
-
-        private async Task<bool> SetStudentHash(StudentModel student, string inputHash)
-        {
-            var hashedStudent = await _secure.SetStudentHash(student, inputHash);
-            if (hashedStudent.PasswordHash == null) return false;
-
-            _appDbContext.Entry(student).CurrentValues.SetValues(hashedStudent);
-            await _appDbContext.SaveChangesAsync();
-            return true;
-        }
-
         public async Task<bool> VerifyPasswordAsync(int userId, string inputHash)
         {
             var salt = await GetStudentSalt(userId);
@@ -71,10 +50,21 @@ namespace Infrastructure.Repositories
 
         }
 
+        private async Task<bool> SetStudentHash(StudentModel student, string inputHash)
+        {
+            var hashedStudent = await _secure.SetStudentHash(student, inputHash);
+            if (hashedStudent.PasswordHash == null) return false;
+
+            _appDbContext.Entry(student).CurrentValues.SetValues(hashedStudent);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+
+
         private async Task<string> GetStudentHash(int userId)
         {
             var student = await _appDbContext.Students.FindAsync(userId);
-            if (student != null) return null;
+            if (student == null) return null;
 
             return student.PasswordHash;
         }
@@ -82,7 +72,7 @@ namespace Infrastructure.Repositories
         private async Task<string> GetStudentSalt(int userId)
         {
             var student = await _appDbContext.Students.FindAsync(userId);
-            return student.Name;
+            return student.StudentSalt;
         }
 
         private async Task<bool> SetStudentSalt(StudentModel student)
