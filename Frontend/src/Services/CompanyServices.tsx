@@ -11,7 +11,7 @@ export const StudentLogin = async (email: string, passwordHash: string) => {
   };
   
 export const getAllCompanies = async () => {
-    return await axios.get(apiUrl) //Add Location for Company Endpoint
+    return await axios.get(apiUrl+`/api/Company`)
     .then(response => response.data)
 }
 
@@ -21,7 +21,7 @@ export const getCompanyById = async (id? : number) => {
 }
 
 export const getAllStudents = async () => {
-    return await axios.get(apiUrl)  // ADD Location for Student Endpoint
+    return await axios.get(apiUrl+`/api/Student`)
     .then(response => response.data)
 }
 

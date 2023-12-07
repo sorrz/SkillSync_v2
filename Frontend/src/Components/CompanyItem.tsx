@@ -16,7 +16,7 @@ const CompanyItem: React.FC<CompanyItemProps> = (props) => {
 
   return (
     <Card className="mb-4 border bg-light rounded shadow overflow-hidden" data-testid="card-id">
-      {/* Image overlay */}
+      
       <div
         className="position-relative"
         style={{
