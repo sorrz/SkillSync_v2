@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Api.Tests.ApiControllerTests
+namespace Api.Tests.StudentControllerTests
 {
     public class StudentControllerTest
     {
@@ -195,8 +195,8 @@ namespace Api.Tests.ApiControllerTests
             var student = GetStudent(id);
             var studentDto = GetStudentDto(id);
 
-                 _studentRepositoryMock.Setup(repo => repo.UpdateStudent(It.IsAny<StudentModel>()))
-                .ReturnsAsync(student);
+            _studentRepositoryMock.Setup(repo => repo.UpdateStudent(It.IsAny<StudentModel>()))
+           .ReturnsAsync(student);
             _mapperMock.Setup(mapper => mapper.Map<StudentModel>(studentDto))
                 .Returns(student);
 
@@ -285,7 +285,7 @@ namespace Api.Tests.ApiControllerTests
         private List<StudentModel> GetStudents()
         {
             var studentList = new List<StudentModel>();
-            for (int i = 1; i < 2; i++)
+            for (int i = 1; i <= 2; i++)
             {
                 var student = GetStudent(i);
                 studentList.Add(student);

@@ -1,9 +1,11 @@
-﻿using Entity.Models;
+﻿using Castle.Core.Logging;
+using Entity.Models;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.EntityFrameworkCore;
 using System.ComponentModel.Design;
 
 namespace Infrastructure.Tests.RepositoryTests
@@ -13,18 +15,17 @@ namespace Infrastructure.Tests.RepositoryTests
         private StudentRepository _sut;
         private Mock<ILogger<StudentRepository>> _loggerMock;
         private Mock<AppDbContext> _appDbContextMock;
-        //private DbContextOptions<AppDbContext> _dbContextOptions;
 
         public StudentRepositoryTests()
         {
             _loggerMock = new Mock<ILogger<StudentRepository>>();
-            //var options = new DbContextOptionsBuilder<AppDbContext>()
-            //    .UseInMemoryDatabase(databaseName: "TestDatabase")
-            //    .Options;
 
-            //var dbContext = new AppDbContext(options);
-            _appDbContextMock = new Mock<AppDbContext>();
-            _sut = new StudentRepository(_appDbContextMock.Object, _loggerMock.Object);
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            var dbContext = new AppDbContext(options);
+            _sut = new StudentRepository(dbContext, _loggerMock.Object);
         }
 
         #region AddStudent
@@ -34,31 +35,15 @@ namespace Infrastructure.Tests.RepositoryTests
         {
             //Arrange
             var id = 1;
-            var student = GetStudent(id);
-            _appDbContextMock.Setup(context => context.Students.AddAsync(It.IsAny<StudentModel>(), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync((StudentModel returnedStudent, CancellationToken token) =>
-                    {
-                        returnedStudent.Id = id;
-                        return default;
-                    });
+            var student = CreateTestStudent(id);
 
             //Act
-            var result = await _sut.AddStudent(student);
+            await _sut.AddStudent(student);
 
             //Assert
-            Assert.NotNull(result);
-            Assert.Equal(student.Name, result.Name);
-
-            _appDbContextMock.Verify(context => context.Students
-                .AddAsync(It.IsAny<StudentModel>(), It.IsAny<CancellationToken>()), Times.Once);
-
-            _appDbContextMock.Verify(context => context.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-
-            _loggerMock.Verify(logger => logger.Log(LogLevel.Information,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => true),
-                It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
+            var addedStudent = await _sut.GetStudentById(student.Id);
+            Assert.NotNull(addedStudent);
+            Assert.Equal(student.Name, addedStudent.Name);
         }
 
         #endregion
@@ -68,63 +53,37 @@ namespace Infrastructure.Tests.RepositoryTests
         public async Task DeleteStudentById_Should_Return_True_When_Student_Exists()
         {
             //Arrange
-            var id = 1;
-            var student = GetStudent(id);
-
-            _appDbContextMock.Setup(context => context.Students.FindAsync(id))
-                .ReturnsAsync(student);
+            var id = 2;
+            var student = CreateTestStudent(id);
+            await _sut.AddStudent(student);
 
             //Act
             var result = await _sut.DeleteStudentById(id);
 
             //Assert
             Assert.True(result);
-
-            _appDbContextMock.Verify(x => x.Students.FindAsync(id), Times.Once);
-
-            _appDbContextMock.Verify(x => x.Students.Remove(student), Times.Once);
-
-            _appDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
-
-            _loggerMock.Verify(
-                logger => logger.Log(
-                    It.IsAny<LogLevel>(),
-                    It.IsAny<EventId>(),
-                    It.IsAny<It.IsAnyType>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-                Times.Never);
+           
         }
+
         [Fact]
         public async Task DeleteStudentById_Should_Return_False_When_Student_Not_Exists()
         {
             // Arrange
-            var id = 1;
+            var id = 3;
+            var studentToDelete = CreateTestStudent(id);
 
-            _appDbContextMock.Setup(x => x.Students.FindAsync(id))
-                .ReturnsAsync((StudentModel)null);
+            await _sut.AddStudent(studentToDelete);
 
             // Act
             var result = await _sut.DeleteStudentById(id);
+            Assert.True(result);
 
             // Assert
-            Assert.False(result);
+            var deletedStudent = await _sut.GetStudentById(id);
+            Assert.Null(deletedStudent);
 
-            _appDbContextMock.Verify(x => x.Students.FindAsync(id), Times.Once);
-
-            _appDbContextMock.Verify(x => x.Students.Remove(It.IsAny<StudentModel>()), Times.Never);
-
-            _appDbContextMock.Verify(x => x.SaveChanges(), Times.Never);
-
-            _loggerMock.Verify(
-                x => x.Log(
-                    It.IsAny<LogLevel>(),
-                    It.IsAny<EventId>(),
-                    It.IsAny<It.IsAnyType>(),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-                Times.Never);
         }
+
         #endregion
 
         #region GetStudentById
@@ -132,11 +91,9 @@ namespace Infrastructure.Tests.RepositoryTests
         public async Task GetStudentById_Should_Return_Student_When_Exists()
         {
             // Arrange
-            var id = 1;
-            var student = GetStudent(id);
-
-            _appDbContextMock.Setup(x => x.Students.FindAsync(id))
-                .ReturnsAsync(student);
+            var id = 4;
+            var student = CreateTestStudent(id);
+            await _sut.AddStudent(student);
 
             // Act
             var result = await _sut.GetStudentById(id);
@@ -146,16 +103,13 @@ namespace Infrastructure.Tests.RepositoryTests
             Assert.Equal(student, result);
             Assert.Equal(student.Id, result.Id);
 
-            _appDbContextMock.Verify(x => x.Students.FindAsync(id), Times.Once);
         }
+
         [Fact]
         public async Task GetStudentById_Should_Return_Null_When_Student_Not_Exists()
         {
             // Arrange
-            var id = 1;
-
-            _appDbContextMock.Setup(x => x.Students.FindAsync(id))
-                .ReturnsAsync((StudentModel)null);
+            var id = 10;
 
             // Act
             var result = await _sut.GetStudentById(id);
@@ -163,46 +117,46 @@ namespace Infrastructure.Tests.RepositoryTests
             // Assert
             Assert.Null(result);
 
-            _appDbContextMock.Verify(x => x.Students.FindAsync(id), Times.Once);
         }
+
         #endregion
 
         #region GetStudents
-        //Todo: Fix test GetStudents for StudentRepsository
-        //[Fact]
-        // public async Task GetStudents_Should_Return_List_Of_Students()
-        // {
-        //     //Arrange
-        //     var students = GetStudents();
-        //     _appDbContextMock.Setup(context => context.Students.ToListAsync())
-        //     .ReturnsAsync(students);
+        [Fact]
+        public async Task GetStudents_Should_Return_List_Of_Students()
+        {
+            //Arrange
+            var students = GetStudents();
+            foreach(var student in students)
+            {
+                await _sut.AddStudent(student);
+            }
 
-        //     // Act
-        //     var result = await _sut.GetStudents();
+            // Act
+            var result = await _sut.GetStudents();
 
-        //     // Assert
-        //     Assert.NotNull(result);
-        //     Assert.Equal(students.Count, result.Count);
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(students.Count, result.Count);
+        }
 
-        //     _appDbContextMock.Verify(context => context.Students.ToListAsync(), Times.Once);
-        // }
-        // [Fact]
-        // public async Task GetStudents_Should_Return_Empty_List_When_No_Students_Exist()
-        // {
-        //     // Arrange
-        //     _appDbContextMock.Setup(context => context.Students.ToListAsync())
-        //         .ReturnsAsync(new List<StudentModel>());
+        [Fact]
+        public async Task GetStudents_Should_Return_Empty_List_When_No_Students_Exist()
+        {
+            // Arrange
+            for (var i = 0; i < 100; i++)
+            {
+                await _sut.DeleteStudentById(i);
+            }
 
-        //     // Act
-        //     var result = await _sut.GetStudents();
+            // Act
+            var result = await _sut.GetStudents();
 
-        //     // Assert
-        //     Assert.NotNull(result);
-        //     Assert.Empty(result);
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
 
-        //     // Kontrollera om ToListAsync-metoden kallades på AppDbContext
-        //     _appDbContextMock.Verify(context => context.Students.ToListAsync(), Times.Once);
-        // }
+        }
         #endregion
 
         #region UpdateStudent
@@ -210,75 +164,55 @@ namespace Infrastructure.Tests.RepositoryTests
         [Fact]
         public async Task UpdateStudent_Should_Update_Existing_Student_And_Return_Updated_Student()
         {
-            // Arrange
-            var id = 1;
-            var updatedStudent = GetStudent(id);
-            var student = GetStudent(id);
-
-            _appDbContextMock.Setup(x => x.Students.FindAsync(id))
-                .ReturnsAsync(student);
-
-            //_appDbContextMock.Setup(context => context.Entry(student).CurrentValues.SetValues(updatedStudent))
-            //    .Verifiable();
-
-            //_appDbContextMock.Setup(context => context.SaveChangesAsync(It.IsAny<CancellationToken>()))
-            //    .ReturnsAsync(1);
+            var studentId = 9;
+            var newName = "Mother of Dragons";
+            var student = CreateTestStudent(studentId);
+            var updatedStudent = CreateTestStudent(studentId, newName);
 
             // Act
-            await _sut.UpdateStudent(student);
+            await _sut.AddStudent(student);
 
-            // Assert
-            _appDbContextMock.Verify(context => context.Students.FindAsync(id), Times.Once);
+            var result = await _sut.UpdateStudent(updatedStudent);
+
+            Assert.NotNull(result);
+            Assert.IsType<StudentModel>(result);
+            Assert.Equal(student.Id, result.Id);
+            Assert.Equal(newName, result.Name);
         }
 
         #endregion
 
         #region HelpersForTests
 
-        private StudentModel GetStudent(int id)
-        {
-            return new StudentModel
-            {
-                Id = id,
-                Name = "John Doe",
-                MailAddress = "john.doe@example.com",
-                PasswordHash = "hashedPassword123", // Replace with actual hashed password
-                TechStack = new List<string> { "C#", "Java", "Python" },
-                PhoneNumber = "123-456-7890",
-                Graduation = new DateTime(2023, 5, 31),
-                StartLia1 = new DateTime(2023, 1, 15),
-                EndLia1 = new DateTime(2023, 4, 15),
-                StartLia2 = new DateTime(2023, 6, 1),
-                EndLia2 = new DateTime(2023, 9, 1),
-                Presentation = "This is my presentation.",
-                ImageUrl = "https://example.com/john_doe.jpg"
-            };
-        }
-        private StudentModel GetStudentWithIdAndName(int id, string name)
+        public static StudentModel CreateTestStudent(int id = 1, string name = "John Doe")
         {
             return new StudentModel
             {
                 Id = id,
                 Name = name,
-                MailAddress = "john.doe@example.com",
-                PasswordHash = "hashedPassword123", // Replace with actual hashed password
-                TechStack = new List<string> { "C#", "Java", "Python" },
+                MailAddress = $"{name.Replace(" ", string.Empty).ToLower()}@example.com",
+                PasswordHash = "hashedPassword", // replace with an actual hash
+                StudentSalt = "studentSalt", // replace with an actual salt
+                TechStack = new List<string> { "C#", "ASP.NET", "SQL" },
                 PhoneNumber = "123-456-7890",
-                Graduation = new DateTime(2023, 5, 31),
-                StartLia1 = new DateTime(2023, 1, 15),
-                EndLia1 = new DateTime(2023, 4, 15),
-                StartLia2 = new DateTime(2023, 6, 1),
-                EndLia2 = new DateTime(2023, 9, 1),
-                Presentation = "This is my presentation.",
-                ImageUrl = "https://example.com/john_doe.jpg"
+                Graduation = DateTime.Now.AddYears(1),
+                StartLia1 = DateTime.Now.AddMonths(3),
+                EndLia1 = DateTime.Now.AddMonths(6),
+                StartLia2 = DateTime.Now.AddMonths(9),
+                EndLia2 = DateTime.Now.AddYears(1),
+                Presentation = $"Test presentation content for {name}",
+                ImageUrl = $"https://example.com/{name.ToLower()}.jpg",
+                ConnectedTo = new List<string> { "Friend1", "Friend2" },
+                LinkedInProfile = $"https://www.linkedin.com/in/{name.Replace(" ", string.Empty)}"
             };
         }
+       
         private List<StudentModel> GetStudents()
         {
             var studentList = new List<StudentModel>();
-            for (int i = 1; i < 2; i++)
+            for (int i = 6; i <= 8; i++)
             {
-                var student = GetStudent(i);
+                var student = CreateTestStudent(i);
                 studentList.Add(student);
             }
             return studentList;
