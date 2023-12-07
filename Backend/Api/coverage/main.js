@@ -221,30 +221,29 @@ var assemblies = [
   {
     "name": "Api",
     "classes": [
-      { "name": "Api.Controllers.ApiController", "rp": "Api_ApiController.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Api.Controllers.CompanyController", "rp": "Api_CompanyController.html", "cl": 66, "ucl": 0, "cal": 66, "tl": 139, "cb": 11, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Api.Controllers.StudentController", "rp": "Api_StudentController.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Api.Controllers.ApiController", "rp": "Api_ApiController.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Api.Controllers.CompanyController", "rp": "Api_CompanyController.html", "cl": 66, "ucl": 0, "cal": 66, "tl": 137, "cb": 11, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Api.Controllers.StudentController", "rp": "Api_StudentController.html", "cl": 67, "ucl": 6, "cal": 73, "tl": 133, "cb": 10, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Api.Helpers.Mapping.MappingService", "rp": "Api_MappingService.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Program", "rp": "Api_Program.html", "cl": 0, "ucl": 43, "cal": 43, "tl": 69, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "Api_Program.html", "cl": 0, "ucl": 44, "cal": 44, "tl": 70, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "Entity",
     "classes": [
       { "name": "Entity.Dtos.CompanyDto", "rp": "Entity_CompanyDto.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Entity.Dtos.LiaPeriodDto", "rp": "Entity_LiaPeriodDto.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Entity.Dtos.StudentDto", "rp": "Entity_StudentDto.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Entity.Dtos.StudentDto", "rp": "Entity_StudentDto.html", "cl": 15, "ucl": 0, "cal": 15, "tl": 23, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Entity.Models.CompanyModel", "rp": "Entity_CompanyModel.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Entity.Models.StudentModel", "rp": "Entity_StudentModel.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Entity.Models.StudentModel", "rp": "Entity_StudentModel.html", "cl": 16, "ucl": 0, "cal": 16, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "Infrastructure",
     "classes": [
-      { "name": "Infrastructure.Context.AppDbContext", "rp": "Infrastructure_AppDbContext.html", "cl": 3, "ucl": 1, "cal": 4, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Infrastructure.Migrations.AppDbContextModelSnapshot", "rp": "Infrastructure_AppDbContextModelSnapshot.html", "cl": 0, "ucl": 110, "cal": 110, "tl": 131, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Infrastructure.Migrations.Init", "rp": "Infrastructure_Init.html", "cl": 0, "ucl": 164, "cal": 164, "tl": 207, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Infrastructure.Repositories.CompanyRepository", "rp": "Infrastructure_CompanyRepository.html", "cl": 37, "ucl": 5, "cal": 42, "tl": 78, "cb": 4, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Infrastructure.Context.AppDbContext", "rp": "Infrastructure_AppDbContext.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Infrastructure.Migrations.AppDbContextModelSnapshot", "rp": "Infrastructure_AppDbContextModelSnapshot.html", "cl": 0, "ucl": 122, "cal": 122, "tl": 143, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Infrastructure.Migrations.NewDatabaseModel", "rp": "Infrastructure_NewDatabaseModel.html", "cl": 0, "ucl": 179, "cal": 179, "tl": 222, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Infrastructure.Repositories.CompanyRepository", "rp": "Infrastructure_CompanyRepository.html", "cl": 38, "ucl": 4, "cal": 42, "tl": 78, "cb": 4, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Infrastructure.Repositories.SecureRepository", "rp": "Infrastructure_SecureRepository.html", "cl": 49, "ucl": 0, "cal": 49, "tl": 91, "cb": 7, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Infrastructure.Repositories.StudentRepository", "rp": "Infrastructure_StudentRepository.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Infrastructure.Repositories.StudentRepository", "rp": "Infrastructure_StudentRepository.html", "cl": 31, "ucl": 11, "cal": 42, "tl": 74, "cb": 3, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Infrastructure.Security.SecurityHandler", "rp": "Infrastructure_SecurityHandler.html", "cl": 25, "ucl": 0, "cal": 25, "tl": 46, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
 ];

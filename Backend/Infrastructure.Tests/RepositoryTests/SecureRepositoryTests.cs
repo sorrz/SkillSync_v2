@@ -38,7 +38,7 @@ namespace Infrastructure.Tests.RepositoryTests
         {
 
             var frontendHash = "4234a9cea21fa911110cf36e96cd887049543ca31e7c95e04028290bde1db1e0";
-            var userId = 1;
+            var userId = 11;
 
             var testStudent = BuildTestStudent(userId);
             var savedStudent = await AddStudentToDbAsync(testStudent);
@@ -46,14 +46,14 @@ namespace Infrastructure.Tests.RepositoryTests
             var result = await _sut.CreateStudentHashAsync(savedStudent, frontendHash);
 
             Assert.True(result);
-
+            
         }
 
         [Fact]
         public async Task VerifyPasswordAsync_ValidCredentials_ReturnsTrue()
         {
             // Arrange
-            var userId = 2;
+            var userId = 12;
             var inputHash = "4234a9cea21fa911110cf36e96cd887049543ca31e7c95e04028290bde1db1e0";
 
 
@@ -72,7 +72,7 @@ namespace Infrastructure.Tests.RepositoryTests
         public async Task VerifyPasswordAsync_NullInputHash_ReturnsFalse()
         {
             // Arrange
-            var userId = 2;
+            var userId = 12;
             string inputHash = null;
 
             // Act
