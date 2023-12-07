@@ -77,15 +77,28 @@ namespace Infrastructure.Repositories
 
         private async Task<bool> SetStudentSalt(StudentModel student)
         {
-            var currentStudentModel = await _appDbContext.Students.FindAsync(student.Id);
-            if (currentStudentModel == null) return false;
+            //var currentStudentModel = await _appDbContext.Students.FindAsync(student.Id);
+            //if (currentStudentModel == null) return false;
             
-            var saltedStudent = await _secure.SetStudentSalt(currentStudentModel);
-            _appDbContext.Entry(currentStudentModel).CurrentValues.SetValues(saltedStudent);
+            var saltedStudent = await _secure.SetStudentSalt(student);
+            _appDbContext.Entry(student).CurrentValues.SetValues(saltedStudent);
             await _appDbContext.SaveChangesAsync();
             return true;
         }
 
+        public async Task<StudentModel?> LoginStudent(string email, string passwordHash)
+        {
+            var student = _appDbContext.Students
+                    .Where(s => s.MailAddress == email.ToString())
+                    .FirstOrDefault();
+            if (student == null) return null;
 
+            var storedHash = student.PasswordHash;
+            var salt = student.StudentSalt;
+            var result = _secure.Verify(passwordHash, storedHash, salt);
+
+            if (result) return student;
+            else return null;
+        }
     }
 }

@@ -4,6 +4,12 @@ import axios from 'axios';
 
 const apiUrl =`${import.meta.env.VITE_API_URL}`;
 
+export const StudentLogin = async (email: string, passwordHash: string) => {
+    
+    return await axios.post(apiUrl+`/Api?email=${email}&passwordHash=${passwordHash}`)
+      .then(response => response.data);
+  };
+  
 export const getAllCompanies = async () => {
     return await axios.get(apiUrl) //Add Location for Company Endpoint
     .then(response => response.data)
