@@ -2,6 +2,7 @@
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Infrastructure.Repositories
 {
@@ -59,7 +60,7 @@ namespace Infrastructure.Repositories
                     _logger.LogError($"Student with id {student.Id} was not found.");
                     throw new InvalidOperationException($"Student with id {student.Id} was not found");
                 }
-                _context.Entry(existingStudent).State = EntityState.Modified;
+                _context.Entry(existingStudent).CurrentValues.SetValues(student);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex) 
