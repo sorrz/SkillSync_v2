@@ -1,9 +1,4 @@
 ﻿using Entity.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Security
 {
@@ -35,7 +30,7 @@ namespace Infrastructure.Security
 
         private bool VerifyMatch(string inputHash, string storedHash, string salt)
         {
-            string enteredHash = BCrypt.Net.BCrypt.HashPassword(inputHash, salt);
+            string enteredHash = BCrypt.Net.BCrypt.HashPassword(inputHash + salt, salt);
             return enteredHash == storedHash;
         }
 

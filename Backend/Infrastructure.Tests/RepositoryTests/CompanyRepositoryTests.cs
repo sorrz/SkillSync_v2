@@ -118,6 +118,58 @@ namespace Infrastructure.Tests.RepositoryTests
 
         #endregion
 
+        #region GetAllCompanies
+
+        [Fact]
+        public async void GetAllCompanies_ShouldReturn_ListOfCompanies()
+        {
+            // Arrange
+            for (var i = 1; i <= 100; i++)
+            {
+                await _sut.DeleteCompanyById(i);
+            }
+            for (var i = 20; i < 30; i++)
+            {
+                var newCompany = GetCompanyWithId(i);
+                await _sut.AddCompany(newCompany);
+            }
+
+            // Act
+            var result = await _sut.GetAllCompanies();
+
+            // Assert
+
+            Assert.NotNull(result);
+            Assert.Equal(10, result.Count);
+        }
+
+        [Fact]
+        public async void GetAllCompanies_ShouldReturn_EmptyListIfNoCompanies()
+        {
+            // Arrange
+
+            for (var i = 30; i < 40; i++)
+            {
+                var newCompany = GetCompanyWithId(i);
+                await _sut.AddCompany(newCompany);
+            }
+            for (var i = 1; i < 100; i++)
+            {
+                await _sut.DeleteCompanyById(i);
+            }
+
+            // Act
+            var result = await _sut.GetAllCompanies();
+
+            // Assert
+
+            Assert.IsType<List<CompanyModel>>(result);
+            Assert.Equal(0, result.Count);
+        }
+
+
+        #endregion
+
         #region UpdateCompany
 
         [Fact]

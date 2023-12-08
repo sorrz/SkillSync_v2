@@ -3,8 +3,6 @@ using AutoMapper;
 using Entity.Models;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using System.ComponentModel.Design;
 
 namespace Api.Controllers
 {
@@ -49,7 +47,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet(Name = "GetAll")]
+        [HttpGet(Name = "GetAllCompanies")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<CompanyDto>>> GetAllCompanies()

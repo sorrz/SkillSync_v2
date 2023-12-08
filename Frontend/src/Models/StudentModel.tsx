@@ -1,4 +1,3 @@
-// StudentModel.tsx
 
 interface StudentModel {
   Id: number;
@@ -15,7 +14,7 @@ interface StudentModel {
   Presentation: string;
   ImageUrl: string;
   connectedTo: string[];
-  LinkedInProfile : string;
+  linkedInProfile: string;
 }
 
 export default StudentModel;

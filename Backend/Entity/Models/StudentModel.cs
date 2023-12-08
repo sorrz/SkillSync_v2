@@ -16,5 +16,7 @@
         public DateTime EndLia2 { get; set; }
         public string Presentation { get; set; }
         public string ImageUrl { get; set; }
+        public List<string> ConnectedTo { get; set; }
+        public string LinkedInProfile { get; set; }
     }
 }

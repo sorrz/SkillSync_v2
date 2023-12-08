@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231124131342_Init")]
-    partial class Init
+    [Migration("20231205125817_NewDatabaseModel")]
+    partial class NewDatabaseModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,10 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ConnectedTo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("EndLia1")
                         .HasColumnType("TEXT");
 
@@ -91,6 +95,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LinkedInProfile")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -118,6 +126,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartLia2")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StudentSalt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TechStack")
