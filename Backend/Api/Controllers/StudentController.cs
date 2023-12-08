@@ -14,16 +14,13 @@ namespace Api.Controllers
         private readonly ILogger<StudentController> _logger;
         private readonly IMapper _mapper;
 
-        public StudentController(
-            IStudentRepository studentRepository,
-            ILogger<StudentController> logger,
-            IMapper mapper
-            )
+        public StudentController(IStudentRepository studentRepository, ILogger<StudentController> logger, IMapper mapper)
         {
             _studentRepository = studentRepository;
             _logger = logger;
             _mapper = mapper;
         }
+
         [HttpGet("GetHealthStudent")]
         public string GetHealth()
         {
@@ -103,7 +100,10 @@ namespace Api.Controllers
                     _logger.LogWarning($"Student could not be updated!");
                     return BadRequest();
                 }
-                var student = _mapper.Map<StudentModel>(studentDto);
+
+                // 
+                var student = await _studentRepository.GetStudentById(studentDto.Id);
+                //
                 var updatedStudent = await _studentRepository.UpdateStudent(student);
                 _logger.LogInformation("Student was updated");
                 return Ok(_mapper.Map<StudentDto>(updatedStudent));
@@ -125,7 +125,7 @@ namespace Api.Controllers
                 return BadRequest("Student is null.");
             }
 
-            var createdStudent = await _studentRepository.AddStudent(student);
+            var createdStudent = await _studentRepository.AddStudent(student, student.PasswordHash);
 
             return CreatedAtAction("GetStudentById", new { id = createdStudent.Id }, createdStudent);
         }

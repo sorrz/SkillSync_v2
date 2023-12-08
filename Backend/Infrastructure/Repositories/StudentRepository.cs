@@ -11,17 +11,20 @@ namespace Infrastructure.Repositories
         private readonly AppDbContext _context;
         private readonly DbSet<StudentModel> _students;
         private readonly ILogger<StudentRepository> _logger;
+        private readonly ISecureRepository _secureRepository;
 
 
-        public StudentRepository(AppDbContext context, ILogger<StudentRepository> logger)
+        public StudentRepository(AppDbContext context, ILogger<StudentRepository> logger, ISecureRepository secureRepository)
         {
             _context = context;
             _logger = logger;
             _students = context.Set<StudentModel>();
+            _secureRepository = secureRepository;
         }
 
-        public async Task<StudentModel> AddStudent(StudentModel student)
+        public async Task<StudentModel> AddStudent(StudentModel student, string inputHash)
         {
+            var salt = await _secureRepository.CreateStudentHashAsync(student, inputHash);
             await _context.Students.AddAsync(student);
             await _context.SaveChangesAsync();
             _logger.LogInformation($"Student whit id {student.Id} was created");
@@ -41,7 +44,7 @@ namespace Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while deleting company with ID {id}: {ex.Message}");
+                _logger.LogError($"An error occurred while deleting student with ID {id}: {ex.Message}");
                 throw;
             }
         }
