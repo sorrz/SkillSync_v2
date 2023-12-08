@@ -22,6 +22,8 @@
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.19.0",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
     "testing-library": "^0.0.2"
   },
   "devDependencies": {
