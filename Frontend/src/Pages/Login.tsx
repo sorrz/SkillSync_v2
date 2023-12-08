@@ -1,7 +1,5 @@
-// Login.tsx
-
 import { useState } from 'react';
-import { UserModel } from '../Models/StudentModel';
+import  StudentModel  from '../Models/StudentModel';
 import { Form, Input, Button, Space } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import '../Styles/login.css';
@@ -10,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 
 interface LoginProps {
-  onLogin: (user: UserModel) => void;
+  onLogin: (user: StudentModel) => void;
 }
 
 export function Login({ onLogin }: LoginProps) {
@@ -20,18 +18,8 @@ export function Login({ onLogin }: LoginProps) {
 
   const handleLogin = () => {
     const hashedPassword = hashPassword(password);
-
-    const user: UserModel = {
-      mailAdress: email,
-      password: hashedPassword,
-      name: '',
-      TechStack: [],
-      phoneNumber: '',
-      liaPeriod1: '',
-      liaPeriod2: '',
-      presentation: '',
-      imgURL: ''
-    };
+    const user = services.Login(username, hashedPassword);
+    
     onLogin(user);
 
     navigate('/profile');
@@ -79,6 +67,7 @@ export function Login({ onLogin }: LoginProps) {
           </Space>
         </Form.Item>
       </Form>
+      <p>Not a member yet? <a href="/register">Sign up!</a></p>
     </div>
   );
 }

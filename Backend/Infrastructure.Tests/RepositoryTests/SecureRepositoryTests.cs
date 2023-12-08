@@ -120,6 +120,7 @@ namespace Infrastructure.Tests.RepositoryTests
                 ConnectedTo = new List<string> { "Friend1", "Friend2" },
                 LinkedInProfile = "https://www.linkedin.com/in/johndoe"
             };
+
         }
        
         private async Task<StudentModel> SetSalt(StudentModel student)

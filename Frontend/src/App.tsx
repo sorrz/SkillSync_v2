@@ -10,6 +10,7 @@ import { Login } from './Pages/Login';
 import Footer from './Components/Footer';
 import StudentModel from './Models/StudentModel';
 import { Profile } from './Pages/Profile';
+import  Register  from './Pages/Register';
 
 function App() {
   const [user, setUser] = useState<StudentModel | null>(null);
@@ -22,6 +23,13 @@ function App() {
     navigate('/');
     setUser(null);
   };
+
+  const handleRegistration = (student: StudentModel) => {
+    // Handle the registration logic (e.g., send data to the server)
+    console.log('Registered student:', student);
+  };
+
+
 
   return (
     <>
@@ -38,6 +46,7 @@ function App() {
               element={<Login onLogin={handleLogin} />}
             />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/register" element={<Register handleRegistration={handleRegistration} />} />
           </Routes>
         </Container>
         <Footer />
