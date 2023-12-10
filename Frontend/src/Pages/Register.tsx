@@ -10,7 +10,7 @@ interface RegisterProps {
 
   const Register: React.FC<RegisterProps> = ({ handleRegistration }) => {
   return (
-    <div className='container shadow p-3 mb-5 bg-white rounded '>
+    <div className='container shadow p-3 mb-5 bg-white rounded' data-testid="register-container">
       <h2 className="py-5 text-center">Register</h2>
       <RegistrationForm handleRegistration={handleRegistration} />
     </div>
