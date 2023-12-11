@@ -16,7 +16,7 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   const handleRegisterClick = () => {
-    navigate('/register');
+    navigate("/register");
   };
 
   return (
