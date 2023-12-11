@@ -272,7 +272,7 @@ namespace Api.Tests.StudentControllerTests
             ////Assert
             Assert.IsType<OkObjectResult>(result.Result);
         }
-        [Fact]
+        [Fact] //Todo: Fix this test
         public async Task EditStudent_Should_Return_InternalServerError_When_Exception_Is_Thrown()
         {
             //Arrange

@@ -11,7 +11,57 @@ namespace Api.Tests.CompanyControllerTests
 {
     public class CompanyControllerTests
     {
+        [Fact]
+        public async Task Test_IsUserAuthenticated()
+        {
+            //Arrange
+            int companyId = 1;
+            var company = BuildCompantWithId(companyId);
 
+            var _repo = new Mock<ICompanyRepository>();
+            _repo.Setup(repo => repo.GetCompanyById(companyId))
+                .ReturnsAsync(company);
+
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(company.Id, company.PasswordHash))
+                .ReturnsAsync(true);
+
+            var _mapper = new Mock<IMapper>();
+            var _logger = new Mock<ILogger<CompanyController>>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
+
+            // Act
+            var result = await _sut.IsUserAuthenticated(companyId);
+
+            // Assert
+            Assert.True(result);
+        }
+        [Fact]
+        public async Task Test_IsUserAuthenticated_False()
+        {
+            //Arrange
+            int companyId = 1;
+            var company = BuildCompantWithId(companyId);
+
+            var _repo = new Mock<ICompanyRepository>();
+            _repo.Setup(repo => repo.GetCompanyById(companyId))
+                .ReturnsAsync(company);
+
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            _secureRepositoryMock.Setup(repo =>
+                repo.VerifyPasswordAsync(company.Id, company.PasswordHash))
+                .ReturnsAsync(false);
+
+            var _mapper = new Mock<IMapper>();
+            var _logger = new Mock<ILogger<CompanyController>>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
+
+            // Act
+            var result = await _sut.IsUserAuthenticated(companyId);
+
+            // Assert
+            Assert.False(result);
+        }
         #region GetById
 
         [Fact]
@@ -28,9 +78,10 @@ namespace Api.Tests.CompanyControllerTests
             var _mapper = new Mock<IMapper>();
             _mapper.Setup(mapper => mapper.Map<CompanyDto>(testCompany)).Returns(testCompanyDto);
 
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
 
             var _logger = new Mock<ILogger<CompanyController>>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
 
             var result = await _sut.GetCompanyById(1);
@@ -47,7 +98,9 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
             _repo.Setup(repo => repo.GetCompanyById(companyId)).ReturnsAsync((CompanyModel)null);
@@ -69,7 +122,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
             _repo.Setup(repo => repo.GetCompanyById(companyId)).ThrowsAsync(new Exception("Test exception"));
@@ -93,9 +147,10 @@ namespace Api.Tests.CompanyControllerTests
         {
             // Arrange
             var _logger = new Mock<ILogger<CompanyController>>();
-            var _repo= new Mock<ICompanyRepository>();
+            var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyIdOne = 1;
             var companyIdTwo = 2;
@@ -133,7 +188,8 @@ namespace Api.Tests.CompanyControllerTests
             var loggerMock = new Mock<ILogger<CompanyController>>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
             var mapperMock = new Mock<IMapper>();
-            var controller = new CompanyController(loggerMock.Object, companyRepositoryMock.Object, mapperMock.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var controller = new CompanyController(loggerMock.Object, companyRepositoryMock.Object, mapperMock.Object, _secureRepositoryMock.Object);
 
             companyRepositoryMock.Setup(repo => repo.GetAllCompanies()).ReturnsAsync(companies ?? new List<CompanyModel>());
 
@@ -154,7 +210,8 @@ namespace Api.Tests.CompanyControllerTests
             var loggerMock = new Mock<ILogger<CompanyController>>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
             var mapperMock = new Mock<IMapper>();
-            var controller = new CompanyController(loggerMock.Object, companyRepositoryMock.Object, mapperMock.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var controller = new CompanyController(loggerMock.Object, companyRepositoryMock.Object, mapperMock.Object, _secureRepositoryMock.Object);
 
             companyRepositoryMock.Setup(repo => repo.GetAllCompanies()).ThrowsAsync(new Exception("Test exception"));
 
@@ -179,7 +236,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
             var validCompany = BuildCompantWithId(companyId);
@@ -205,7 +263,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             // Act
             var result = await _sut.AddCompany(invalidCompany);
@@ -224,7 +283,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyID = 1;
             var validCompany = BuildCompantWithId(companyID);
@@ -252,7 +312,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
             var newContact = "Johan Larsson";
@@ -261,9 +322,12 @@ namespace Api.Tests.CompanyControllerTests
             var updatedCompanyModel = BuildCompanyWithContactNameAndId(companyId, newContact);
             var updatedCompanyDto = BuildTestCompanyDtoWithContactNameAndId(companyId, newContact);
 
+            _repo.Setup(repo => repo.GetCompanyById(companyId)).ReturnsAsync(newCompanyModel);
             _repo.Setup(repo => repo.UpdateCompany(newCompanyModel)).ReturnsAsync(updatedCompanyModel);
             _mapper.Setup(mapper => mapper.Map<CompanyModel>(newCompanyDto)).Returns(newCompanyModel);
             _mapper.Setup(mapper => mapper.Map<CompanyDto>(updatedCompanyModel)).Returns(updatedCompanyDto);
+            _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync(true);
 
             // Act
             var result = await _sut.EditCompany(companyId, newCompanyDto);
@@ -284,7 +348,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             // Act
             var result = await _sut.EditCompany(companyId, invalidCompanyDto);
@@ -293,21 +358,25 @@ namespace Api.Tests.CompanyControllerTests
             Assert.IsType<NoContentResult>(result.Result);
         }
 
-        [Fact]
+        [Fact] //Todo: Fix this test
         public async Task EditCompany_ReturnsInternalServerError_WhenExceptionOccurs()
         {
             // Arrange
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
             var newCompanyDto = BuildTestCompanyDto(companyId);
             var newCompanyModel = BuildCompantWithId(companyId);
 
+            //_repo.Setup(repo => repo.GetCompanyById(companyId)).ReturnsAsync((CompanyModel?)null);
             _repo.Setup(repo => repo.UpdateCompany(newCompanyModel)).ThrowsAsync(new Exception("Test exception"));
             _mapper.Setup(mapper => mapper.Map<CompanyModel>(newCompanyDto)).Returns(newCompanyModel);
+            //_secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
+                //.ReturnsAsync(false);
 
             // Act
             var result = await _sut.EditCompany(companyId, newCompanyDto);
@@ -332,11 +401,14 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
-
+            _repo.Setup(repo => repo.GetCompanyById(companyId)).ReturnsAsync(BuildCompantWithId(companyId));
             _repo.Setup(repo => repo.DeleteCompanyById(companyId)).ReturnsAsync(true);
+            _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync(true);
 
             // Act
             var result = await _sut.DeleteCompanyById(companyId);
@@ -355,7 +427,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
 
@@ -378,7 +451,8 @@ namespace Api.Tests.CompanyControllerTests
             var _logger = new Mock<ILogger<CompanyController>>();
             var _repo = new Mock<ICompanyRepository>();
             var _mapper = new Mock<IMapper>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object);
+            var _secureRepositoryMock = new Mock<ISecureRepository>();
+            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
 
             var companyId = 1;
 
