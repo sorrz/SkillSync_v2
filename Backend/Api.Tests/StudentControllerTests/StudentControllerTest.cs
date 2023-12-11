@@ -15,16 +15,61 @@ namespace Api.Tests.StudentControllerTests
         private Mock<IStudentRepository> _studentRepositoryMock;
         private Mock<ILogger<StudentController>> _loggerMock;
         private Mock<IMapper> _mapperMock;
+        private Mock<ISecureRepository> _secureRepositoryMock;
 
         public StudentControllerTest()
         {
             _studentRepositoryMock = new Mock<IStudentRepository>();
             _loggerMock = new Mock<ILogger<StudentController>>();
             _mapperMock = new Mock<IMapper>();
+            _secureRepositoryMock = new Mock<ISecureRepository>();
             _sut = new StudentController(
                 _studentRepositoryMock.Object,
                 _loggerMock.Object,
-                _mapperMock.Object);
+                _mapperMock.Object,
+                _secureRepositoryMock.Object
+                );
+        }
+
+        [Fact]
+        public async Task Test_IsUserAuthenticated()
+        {
+            //Arrange
+            int studentId = 1;
+            var student = GetStudent(studentId);
+
+            _studentRepositoryMock.Setup(repo => repo.GetStudentById(studentId))
+                .ReturnsAsync(student);
+
+            _secureRepositoryMock.Setup(repo =>
+                repo.VerifyPasswordAsync(student.Id, student.PasswordHash))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _sut.IsUserAuthenticated(studentId);
+
+            // Assert
+            Assert.True(result);
+        }
+        [Fact]
+        public async Task Test_IsUserAuthenticated_False()
+        {
+            //Arrange
+            int studentId = 1;
+            var student = GetStudent(studentId);
+
+            _studentRepositoryMock.Setup(repo => repo.GetStudentById(studentId))
+                .ReturnsAsync(student);
+
+            _secureRepositoryMock.Setup(repo =>
+                repo.VerifyPasswordAsync(student.Id, student.PasswordHash))
+                .ReturnsAsync(false);
+
+            // Act
+            var result = await _sut.IsUserAuthenticated(studentId);
+
+            // Assert
+            Assert.False(result);
         }
 
         #region GetStudentById
@@ -156,12 +201,17 @@ namespace Api.Tests.StudentControllerTests
         #region DeleteStudent
 
         [Fact]
-        public async Task DeleteStudentById_Should_Return_OkResult_When_Todo_Was_Deleted()
+        public async Task DeleteStudentById_Should_Return_OkResult_When_Student_Was_Deleted()
         {
             //Arrange
             var id = 1;
+            var student = GetStudent(id);
+            _studentRepositoryMock.Setup(repo => repo.GetStudentById(id))
+                .ReturnsAsync(student);
             _studentRepositoryMock.Setup(repo => repo.DeleteStudentById(id))
-            .ReturnsAsync(true);
+                .ReturnsAsync(true);
+            _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync(true);
             //Act
             var result = await _sut.DeleteStudentById(id);
 
@@ -170,12 +220,12 @@ namespace Api.Tests.StudentControllerTests
         }
 
         [Fact]
-        public async Task DeleteStudentById_Should_Return_NotFound_When_Todo_Not_Found()
+        public async Task DeleteStudentById_Should_Return_NotFound_When_Student_Not_Found()
         {
             //Arrange
             var id = 1;
             _studentRepositoryMock.Setup(repo => repo.DeleteStudentById(id))
-            .ReturnsAsync(false);
+                .ReturnsAsync(false);
             //Act
             var result = await _sut.DeleteStudentById(id);
 
@@ -186,27 +236,19 @@ namespace Api.Tests.StudentControllerTests
         #endregion
 
         #region EditStudent
-
         [Fact]
         public async Task EditStudent_Should_Return_BadRequest_When_Student_Could_Not_Be_Updated()
         {
-            //Arrange
+            // Arrange
             var id = 1;
-            var student = GetStudent(id);
-            var studentDto = GetStudentDto(id);
-
-            _studentRepositoryMock.Setup(repo => repo.UpdateStudent(It.IsAny<StudentModel>()))
-           .ReturnsAsync(student);
-            _mapperMock.Setup(mapper => mapper.Map<StudentModel>(studentDto))
-                .Returns(student);
-
-            //Act
+            StudentDto studentDto = null;
+            
+            // Act
             var result = await _sut.EditStudent(id, studentDto);
 
-            ////Assert
-            Assert.IsType<OkObjectResult>(result.Result);
+            // Assert
+            Assert.IsType<BadRequestResult>(result.Result);
         }
-
         [Fact]
         public async Task EditStudent_Should_Return_OkResult_When_Student_Has_Been_Updated()
         {
@@ -215,10 +257,14 @@ namespace Api.Tests.StudentControllerTests
             var student = GetStudent(id);
             var studentDto = GetStudentDto(id);
 
+            _studentRepositoryMock.Setup(repo => repo.GetStudentById(id))
+                .ReturnsAsync(student);
             _studentRepositoryMock.Setup(repo => repo.UpdateStudent(It.IsAny<StudentModel>()))
                 .ReturnsAsync(student);
             _mapperMock.Setup(mapper => mapper.Map<StudentModel>(studentDto))
                 .Returns(student);
+            _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync(true);
 
             //Act
             var result = await _sut.EditStudent(id, studentDto);
@@ -233,10 +279,16 @@ namespace Api.Tests.StudentControllerTests
             var id = 1;
             var student = GetStudent(id);
             var studentDto = GetStudentDto(id);
-            _studentRepositoryMock.Setup(repo => repo.UpdateStudent(student))
-                .ThrowsAsync(new Exception());
+
             _mapperMock.Setup(mapper => mapper.Map<StudentModel>(studentDto))
                 .Returns(student);
+            _studentRepositoryMock.Setup(repo => repo.GetStudentById(id))
+                .ReturnsAsync((StudentModel?)null);
+            _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync(false);
+            _studentRepositoryMock.Setup(repo => repo.UpdateStudent(student))
+                .ThrowsAsync(new Exception());
+
             //Act
             var result = await _sut.EditStudent(id, studentDto);
 
