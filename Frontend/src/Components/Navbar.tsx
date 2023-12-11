@@ -5,7 +5,6 @@ import { LogoutOutlined } from '@ant-design/icons'; // Import the Ant Design log
 import StudentModel from '../Models/StudentModel';
 import "../Styles/navbar.css";
 import logo from '../assets/dans_logo_png.png';
-import profile from '../assets/profil.png';
 import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
@@ -15,13 +14,71 @@ interface NavbarProps {
 }
 
 export function Navbar({ isLoggedIn, user, onLogout }: NavbarProps) {
-  
-  const imgSrc = user?.ImageUrl || profile;
   const navigate = useNavigate();
+
   const doLogOut = () => {
     onLogout();
     navigate('/')
   };
+
+  const renderProfileContent = () => {
+    if (isLoggedIn) {
+      if (!user.ImageUrl === "string") // TODO! THIS NEEDS TO BE FIXED!
+      {
+        return (
+          <>
+            <img
+              src={user.ImageUrl}
+              style={{ height: '3rem', width: '3rem', borderRadius: '50%', objectFit: 'cover' }}
+              alt="Profile"
+              className="profile-picture"
+            />
+            <Button
+              className="logOutCircle rounded-circle d-flex justify-content-center align-items-center"
+              style={{
+                width: '2rem',
+                height: '2rem',
+                position: 'absolute',
+                bottom: '30%',
+                right: '-30%',
+                transform: 'translate(25%, 25%)',
+              }}
+              onClick={doLogOut}
+              icon={<LogoutOutlined />}
+              data-testid="actionButton"
+            />
+          </>
+        );
+      } else {
+        return (
+          <div
+            style={{
+              height: '3rem',
+              width: '3rem',
+              borderRadius: '50%',
+              backgroundColor: "orange",
+            }}
+          ><Button
+          className="logOutCircle rounded-circle d-flex justify-content-center align-items-center"
+          style={{
+            width: '2rem',
+            height: '2rem',
+            position: 'absolute',
+            bottom: '30%',
+            right: '-30%',
+            transform: 'translate(25%, 25%)',
+          }}
+          onClick={doLogOut}
+          icon={<LogoutOutlined />}
+          data-testid="actionButton"
+        />
+        </div>
+        );
+      }
+    }
+    return null;
+  };
+
 
   return (
     <NavbarBS sticky="top" className="bg-white shadow-sm mb-3">
@@ -48,22 +105,9 @@ export function Navbar({ isLoggedIn, user, onLogout }: NavbarProps) {
           </Nav.Link>
         </Nav>
         {isLoggedIn ? (
-          <>
-            <Nav.Link to="/profile" as={NavLink}>
-              <div style={{ position: "relative"}}>
-              <img src={imgSrc} style={{ height: '3rem', width: '3rem', borderRadius: '50%', objectFit: 'cover' }} alt="Profile" className="profile-picture" /> 
-              <Button className="logOutCircle rounded-circle d-flex justify-content-center align-items-center" 
-                style={{  
-                width: "2rem", 
-                height: "2rem", 
-                position: "absolute", 
-                bottom: "30%", 
-                right: "-30%", 
-                transform: "translate(25%, 25%)",
-              }} onClick={doLogOut} icon={<LogoutOutlined />} data-testid="actionButton" />
-            </div>
-            </Nav.Link>
-          </> 
+          <Nav.Link to="/profile" as={NavLink}>
+            <div style={{ position: 'relative' }}>{renderProfileContent()}</div>
+          </Nav.Link>
         ) : (
           <Nav.Link to="/login" as={NavLink}>
             <Button data-testid="actionButton">Login</Button>
