@@ -4,8 +4,14 @@ import axios from 'axios';
 
 const apiUrl =`${import.meta.env.VITE_API_URL}`;
 
+export const StudentLogin = async (email: string, passwordHash: string) => {
+    
+    return await axios.post(apiUrl+`/Api?email=${email}&passwordHash=${passwordHash}`)
+      .then(response => response.data);
+  };
+  
 export const getAllCompanies = async () => {
-    return await axios.get(apiUrl) //Add Location for Company Endpoint
+    return await axios.get(apiUrl+`/api/Company`)
     .then(response => response.data)
 }
 
@@ -15,7 +21,7 @@ export const getCompanyById = async (id? : number) => {
 }
 
 export const getAllStudents = async () => {
-    return await axios.get(apiUrl)  // ADD Location for Student Endpoint
+    return await axios.get(apiUrl+`/api/Student`)
     .then(response => response.data)
 }
 

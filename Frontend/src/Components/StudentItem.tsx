@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, Avatar, Row, Col } from 'antd';
+import React, { useEffect } from 'react';
+import { Card, Row, Col, Avatar, List } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import StudentModel from '../Models/StudentModel';
 
@@ -8,28 +8,49 @@ interface StudentItemProps {
 }
 
 const StudentItem: React.FC<StudentItemProps> = ({ student }) => {
+  useEffect(() => {
+    console.log("StudentItem props:", student);
+  }, [student]);
+
+  if (!student || !student.name || !student.presentation || !student.phoneNumber) {
+    console.error('Invalid student data:', student);
+    return null; // or handle accordingly
+  }
+
   return (
-    <Card className="mb-4 border rounded shadow" data-testid="studentCard">
+    <Card className="mb-4 border rounded shadow" style={{  width: '65vw', margin: '0.2rem' }}>
       <Row justify="space-between" align="middle">
         <Col span={4}>
-          <Avatar size={150} icon={<UserOutlined />} src={student.ImageUrl} className="circle" />
+          <Avatar size={150} icon={<UserOutlined />} src={student.imageUrl} className="circle" />
         </Col>
         <Col span={16}>
-          <div className="text-center" style={{ background: '#ccffcc', padding: '10px', borderRadius: '8px' }}>
-            <h3>{student.Name}</h3>
-            <p>{student.TechStack.join(', ')}</p>
+          <div className="text-center" style={{ background: '#ccffcc', padding: '10px', borderRadius: '5px' }}>
+            {student.name && (
+              <h3>Hi, I'm <br />{student.name}</h3>
+            )}
+            {student.techStack && (
+              <List
+                size="small"
+                bordered
+                dataSource={student.techStack}
+                renderItem={(tech) => <List.Item>{tech}</List.Item>}
+                style={{ marginTop: '10px' }}
+              />
+            )}
           </div>
         </Col>
       </Row>
 
-      <Card.Meta title="About me" description={<p>{student.Presentation}</p>} style={{ marginTop: '10px' }} />
-
       <div className="pt-4 mt-auto text-muted text-center">
         <p>
-          Phone: {student.PhoneNumber} | Graduation: {student.Graduation} | 
-          LIA 1: {student.StartLia1} - {student.EndLia1} | 
-          LIA 2: {student.StartLia2} - {student.EndLia2}
+          Phone: {student.phoneNumber} | Graduation: {student.graduation} | 
+          LIA 1: {student.startLia1} - {student.endLia1} | 
+          LIA 2: {student.startLia1} - {student.endLia2}
         </p>
+      </div>
+
+      <div className="card-body">
+        <a href={`/profile/${student.id}`} className="card-link">Profile Link</a>
       </div>
     </Card>
   );

@@ -15,17 +15,19 @@ namespace Api.Controllers
         private readonly IMapper _mapper;
         private readonly ISecureRepository _secureRepository;
 
+<<<<
         public StudentController(
             IStudentRepository studentRepository,
             ILogger<StudentController> logger,
             IMapper mapper,
             ISecureRepository secureRepository
             )
+        public StudentController(IStudentRepository studentRepository, ILogger<StudentController> logger, IMapper mapper)
+
         {
             _studentRepository = studentRepository;
             _logger = logger;
             _mapper = mapper;
-            _secureRepository = secureRepository;
         }
 
         #region Controllers
@@ -108,12 +110,17 @@ namespace Api.Controllers
                     _logger.LogWarning($"Student could not be updated!");
                     return BadRequest();
                 }
+
                 if (!await IsUserAuthenticated(id))
                 {
                     _logger.LogInformation("User is not authenticated.");
                     return Unauthorized("User is not authenticated.");
                 }
                 var student = _mapper.Map<StudentModel>(studentDto);
+                // 
+                var student = await _studentRepository.GetStudentById(studentDto.Id);
+                //
+
                 var updatedStudent = await _studentRepository.UpdateStudent(student);
                 _logger.LogInformation("Student was updated");
                 return Ok(_mapper.Map<StudentDto>(updatedStudent));
@@ -135,7 +142,7 @@ namespace Api.Controllers
                 return BadRequest("Student is null.");
             }
 
-            var createdStudent = await _studentRepository.AddStudent(student);
+            var createdStudent = await _studentRepository.AddStudent(student, student.PasswordHash);
 
             return CreatedAtAction("GetStudentById", new { id = createdStudent.Id }, createdStudent);
         }

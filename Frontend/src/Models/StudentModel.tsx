@@ -1,18 +1,19 @@
+// StudentModel.ts
 
 interface StudentModel {
-  Id: number;
-  Name: string;
-  MailAddress: string;
-  PasswordHash: string;
-  TechStack: string[];
-  PhoneNumber: string;
-  Graduation: string;
-  StartLia1: string;
-  EndLia1: string;
-  StartLia2: string;
-  EndLia2: string;
-  Presentation: string;
-  ImageUrl: string;
+  id: number;
+  name: string;
+  mailAddress: string;
+  passwordHash: string;
+  techStack: string[];
+  phoneNumber: string;
+  graduation: string; // You may want to use a Date type here if graduation is a date
+  startLia1: string; // Use Date type if lia1Start is a date
+  endLia1: string; // Use Date type if lia1End is a date
+  startLia2: string; // Use Date type if lia2Start is a date
+  endLia2: string; // Use Date type if lia2End is a date
+  presentation: string;
+  imageUrl: string;
   connectedTo: string[];
   linkedInProfile: string;
 }
