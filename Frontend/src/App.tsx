@@ -10,6 +10,7 @@ import { Login } from './Pages/Login';
 import Footer from './Components/Footer';
 import StudentModel from './Models/StudentModel';
 import { Profile } from './Pages/Profile';
+import  Register  from './Pages/Register';
 import { StudentLogin } from './Services/CompanyServices';
 
 function App() { 
@@ -23,7 +24,6 @@ function App() {
 
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 
-  // Convert the hash buffer to a hex string
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
 
@@ -51,6 +51,11 @@ function App() {
     }
   };
 
+  const handleRegistration = (student: StudentModel) => {
+    // Handle the registration logic (e.g., send data to the server)
+    console.log('Registered student:', student);
+  };
+
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -66,6 +71,7 @@ function App() {
               element={<Login onLogin={handleLogin} />}
             />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/register" element={<Register handleRegistration={handleRegistration} />} />
           </Routes>
         </Container>
         <Footer />
