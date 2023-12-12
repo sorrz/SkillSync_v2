@@ -112,6 +112,9 @@ Run the following command to execute backend tests:
 dotnet test
 
 ```
+Here we have included Coverage Report:
+![image](https://github.com/sorrz/SkillSync_v2/assets/27415422/759c042a-dfcc-4b6a-99f9-f0b60435f324)
+
 
 ### Frontend
 
