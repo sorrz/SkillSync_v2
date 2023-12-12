@@ -32,14 +32,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ handleRegistration 
   return (
     
     <Form form={form} onFinish={onFinish} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} justify-content-center flex-wrap>
-      <div className="d-flex p-2 bd-highlight">
-        <div className="flex-fill p-2 bd-highlight">
       <Form.Item label="Name" name="Name" rules={[{ required: true, message: 'Please enter your name' }]}>
         <Input />
       </Form.Item>
-      </div>
 
-      <div className="flex-fill p-2 bd-highlight">
       <Form.Item
         label="Mail Address"
         name="MailAddress"
@@ -47,17 +43,16 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ handleRegistration 
       >
         <Input type="email" />
       </Form.Item>
-      </div>
 
-      <div className="flex-fill p-2 bd-highlight" >
+      <Form.Item label="Password" name="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
+        <Input.Password />
+      </Form.Item>
+
       <Form.Item label="Phone Number" name="PhoneNumber">
         <Input />
       </Form.Item>
-      </div>
-      </div>
 
-        <div className="d-flex p-2 bd-highlight ">
-        <div className="flex-fill p-2 bd-highlight">
+      
          <Form.Item label="Tech Stack" name="TechStack">
             <Select mode="multiple" placeholder="Select tech stack" onChange={handleTechStackChange}>
             <Option value="React">React</Option>
@@ -79,57 +74,43 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ handleRegistration 
           
             </Select>
          </Form.Item>
-      </div>
-        </div>
-
-      <div className="d-flex bd-highlight mb-3">
-      <div className="flex-fill p-2 bd-highlight">
-      <Form.Item label="Graduation" className='mx-auto' name="Graduation">
-      <DatePicker />
+      
+         <Form.Item label="Graduation" className='mx-auto' name="Graduation">
+        <DatePicker />
       </Form.Item>
-      </div>
 
-      <div className="flex-fill p-2 bd-highlight">
       <Form.Item label="Start Lia 1" name="StartLia1">
-      <DatePicker />
+        <DatePicker />
       </Form.Item>
+
       <Form.Item label="End Lia 1" name="EndLia1">
-      <DatePicker />
+        <DatePicker />
       </Form.Item>
-      </div>
-      
-      <div className="flex-fill p-2 bd-highlight">
+
       <Form.Item label="Start Lia 2" name="StartLia2">
-      <DatePicker />
+        <DatePicker />
       </Form.Item>
+
       <Form.Item label="End Lia 2" name="EndLia2">
-      <DatePicker />
+        <DatePicker />
       </Form.Item>
-      </div>
-      
-      </div>
-      <div className="d-flex p-2 bd-highlight">
-        <div className="flex-fill p-2 bd-highlight">
+
       <Form.Item label="Presentation" name="Presentation">
         <Input.TextArea />
-      </Form.Item>  
-       </div>
-       <div className="flex-fill p-2 bd-highlight">
+      </Form.Item>
+
       <Form.Item label="Image" name="ImageUrl">
         <Input />
       </Form.Item>
-      </div>
-      <div className="flex-fill p-2 bd-highlight">
+
       <Form.Item label="LinkedIn" name="LinkedInProfile">
         <Input />
       </Form.Item>
-      </div>
-      </div>
-      <Form.Item wrapperCol={{ offset: 11, span: 16 }}>
-        <div className="justify-content-center p-2 bd-highlight">
+
+      <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
         <Button type="primary" htmlType="submit">
           Register
-        </Button></div>
+        </Button>
       </Form.Item>
    
     </Form>

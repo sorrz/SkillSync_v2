@@ -20,7 +20,7 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="LoginContainer bg-white shadow-sm rounded p-4" style={{ position: "relative",
+    <div className="LoginContainer bg-white shadow-sm rounded p-4 mulish-font" style={{ position: "relative",
     maxWidth: "400px",
     margin: "auto",
     marginTop: "50px",
@@ -53,7 +53,7 @@ export function Login({ onLogin }: LoginProps) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
-        <Form.Item>
+        <Form.Item className="button-container">
           <Space direction="vertical">
             <Button htmlType="submit" block>
               Log in
@@ -63,9 +63,9 @@ export function Login({ onLogin }: LoginProps) {
       </Form>
       <div className="mt-3 text-center">
         <p>
-          Don't have an account? 
+          Don't have an account?  
           <span onClick={handleRegisterClick} style={{ cursor: "pointer", color: "blue" }}>
-            Register here
+            <br></br> Register here
           </span>
         </p>
       </div>
