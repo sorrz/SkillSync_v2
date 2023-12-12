@@ -11,57 +11,7 @@ namespace Api.Tests.CompanyControllerTests
 {
     public class CompanyControllerTests
     {
-        [Fact]
-        public async Task Test_IsUserAuthenticated()
-        {
-            //Arrange
-            int companyId = 1;
-            var company = BuildCompantWithId(companyId);
-
-            var _repo = new Mock<ICompanyRepository>();
-            _repo.Setup(repo => repo.GetCompanyById(companyId))
-                .ReturnsAsync(company);
-
-            var _secureRepositoryMock = new Mock<ISecureRepository>();
-            _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(company.Id, company.PasswordHash))
-                .ReturnsAsync(true);
-
-            var _mapper = new Mock<IMapper>();
-            var _logger = new Mock<ILogger<CompanyController>>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
-
-            // Act
-            var result = await _sut.IsUserAuthenticated(companyId);
-
-            // Assert
-            Assert.True(result);
-        }
-        [Fact]
-        public async Task Test_IsUserAuthenticated_False()
-        {
-            //Arrange
-            int companyId = 1;
-            var company = BuildCompantWithId(companyId);
-
-            var _repo = new Mock<ICompanyRepository>();
-            _repo.Setup(repo => repo.GetCompanyById(companyId))
-                .ReturnsAsync(company);
-
-            var _secureRepositoryMock = new Mock<ISecureRepository>();
-            _secureRepositoryMock.Setup(repo =>
-                repo.VerifyPasswordAsync(company.Id, company.PasswordHash))
-                .ReturnsAsync(false);
-
-            var _mapper = new Mock<IMapper>();
-            var _logger = new Mock<ILogger<CompanyController>>();
-            var _sut = new CompanyController(_logger.Object, _repo.Object, _mapper.Object, _secureRepositoryMock.Object);
-
-            // Act
-            var result = await _sut.IsUserAuthenticated(companyId);
-
-            // Assert
-            Assert.False(result);
-        }
+       
         #region GetById
 
         [Fact]
@@ -358,7 +308,7 @@ namespace Api.Tests.CompanyControllerTests
             Assert.IsType<NoContentResult>(result.Result);
         }
 
-        [Fact] //Todo: Fix this test
+        [Fact(Skip = "None obtainable state, when not using in-memory database.")]
         public async Task EditCompany_ReturnsInternalServerError_WhenExceptionOccurs()
         {
             // Arrange

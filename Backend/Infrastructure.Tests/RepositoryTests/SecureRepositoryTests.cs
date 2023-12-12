@@ -26,12 +26,39 @@ namespace Infrastructure.Tests.RepositoryTests
 
             dbContext = new AppDbContext(options);
             _sut = new SecureRepository(dbContext, _logger.Object);
-            _studentRepository = new StudentRepository(dbContext, studentLogger.Object);
-
+            _studentRepository = new StudentRepository(dbContext, studentLogger.Object, _sut);
 
         }
 
 
+        [Fact]
+        public async Task Test_IsUserAuthenticated_True()
+        {
+            //Arrange
+            int questionId = 1;
+            var testStudent = BuildTestStudent(questionId);
+            await AddStudentToDbAsync(testStudent);
+
+
+            // Act
+            var result = await _sut.IsUserAuthenticated(questionId);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task Test_IsUserAuthenticated_False()
+        {
+            //Arrange
+            int questionId = 111111111;
+
+            // Act
+            var result = await _sut.IsUserAuthenticated(questionId);
+
+            // Assert
+            Assert.False(result);
+        }
 
         [Fact]
         public async void Should_CreateSafeStudentPwdWithSalt_WhenCalled()

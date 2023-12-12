@@ -31,13 +31,14 @@ namespace Api.Controllers
             if (passwordHash == null || email == null)
             {
                 _logger.LogError("Email or Password is null.");
-                return BadRequest("Student is null.");
+                return BadRequest("Mail or Password was null");
             }
 
             var loggedInStudent = await _secureRepository.LoginStudent(email, passwordHash);
             if(loggedInStudent == null)
             {
                 _logger.LogError($"Failed to Login {email}");
+                return BadRequest($"Failed to Login {email}");
             }
             return Ok(_mapper.Map<StudentDto>(loggedInStudent));
         }

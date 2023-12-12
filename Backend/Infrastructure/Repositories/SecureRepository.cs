@@ -35,6 +35,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<bool> VerifyPasswordAsync(int userId, string inputHash)
         {
+            if(inputHash  == null) return false;
             var salt = await GetStudentSalt(userId);
             var storedHash = await GetStudentHash(userId);
             var result = _secure.Verify(inputHash, storedHash, salt);
@@ -47,6 +48,16 @@ namespace Infrastructure.Repositories
             {
                 return false;
             }
+
+        }
+
+        public async Task<bool> IsUserAuthenticated(int id)
+        {
+            var student = await _appDbContext.Students.FindAsync(id);
+            var company = await _appDbContext.Companies.FindAsync(id);
+
+            if (student != null || company != null) return true;
+            return false;
 
         }
 

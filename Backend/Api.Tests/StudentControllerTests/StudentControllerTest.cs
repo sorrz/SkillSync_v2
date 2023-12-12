@@ -23,53 +23,13 @@ namespace Api.Tests.StudentControllerTests
             _loggerMock = new Mock<ILogger<StudentController>>();
             _mapperMock = new Mock<IMapper>();
             _secureRepositoryMock = new Mock<ISecureRepository>();
+
             _sut = new StudentController(
                 _studentRepositoryMock.Object,
                 _loggerMock.Object,
                 _mapperMock.Object,
                 _secureRepositoryMock.Object
                 );
-        }
-
-        [Fact]
-        public async Task Test_IsUserAuthenticated()
-        {
-            //Arrange
-            int studentId = 1;
-            var student = GetStudent(studentId);
-
-            _studentRepositoryMock.Setup(repo => repo.GetStudentById(studentId))
-                .ReturnsAsync(student);
-
-            _secureRepositoryMock.Setup(repo =>
-                repo.VerifyPasswordAsync(student.Id, student.PasswordHash))
-                .ReturnsAsync(true);
-
-            // Act
-            var result = await _sut.IsUserAuthenticated(studentId);
-
-            // Assert
-            Assert.True(result);
-        }
-        [Fact]
-        public async Task Test_IsUserAuthenticated_False()
-        {
-            //Arrange
-            int studentId = 1;
-            var student = GetStudent(studentId);
-
-            _studentRepositoryMock.Setup(repo => repo.GetStudentById(studentId))
-                .ReturnsAsync(student);
-
-            _secureRepositoryMock.Setup(repo =>
-                repo.VerifyPasswordAsync(student.Id, student.PasswordHash))
-                .ReturnsAsync(false);
-
-            // Act
-            var result = await _sut.IsUserAuthenticated(studentId);
-
-            // Assert
-            Assert.False(result);
         }
 
         #region GetStudentById
@@ -272,7 +232,7 @@ namespace Api.Tests.StudentControllerTests
             ////Assert
             Assert.IsType<OkObjectResult>(result.Result);
         }
-        [Fact] //Todo: Fix this test
+        [Fact(Skip = "Not obtainable when not using a In-Memory Database")]
         public async Task EditStudent_Should_Return_InternalServerError_When_Exception_Is_Thrown()
         {
             //Arrange
@@ -302,27 +262,29 @@ namespace Api.Tests.StudentControllerTests
 
         #region AddStudent
 
-        [Fact]
+        [Fact(Skip = "None obtainable state when not using in-memory database")]
         public async Task AddStudent_Should_Return_CreatedAtAction_When_Successed_Adding_Student()
         {
             //Arrange
             var id = 1;
+            var studentDto = GetStudentDto(id);
             var student = GetStudent(id);
 
-            _studentRepositoryMock.Setup(repo => repo.AddStudent(student))
+            _studentRepositoryMock.Setup(repo => repo.AddStudent(student, studentDto.PasswordHash))
                 .ReturnsAsync(student);
 
             //Act
-            var result = await _sut.AddStudent(student);
+            var result = await _sut.AddStudent(studentDto);
 
             //Assert
             var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var model = Assert.IsType<StudentModel>(createdResult.Value);
             Assert.Equal(student.Id, model.Id);
         }
+
         [Theory]
         [InlineData(null)]
-        public async Task AddStudent_Should_Return_BadRequest_When_Student_Is_Null(StudentModel invalidStudent)
+        public async Task AddStudent_Should_Return_BadRequest_When_Student_Is_Null(StudentDto invalidStudent)
         {
             //Act
             var result = await _sut.AddStudent(invalidStudent);

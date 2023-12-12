@@ -106,7 +106,7 @@ namespace Api.Controllers
                     _logger.LogInformation($"Faulty Dto from Frontend, no company information found");
                     return NoContent();
                 }
-                if (!await IsUserAuthenticated(companyId))
+                if (!await _secureRepository.IsUserAuthenticated(companyId))
                 {
                     _logger.LogInformation("User is not authenticated.");
                     return Unauthorized("User is not authenticated.");
@@ -136,7 +136,7 @@ namespace Api.Controllers
                 _logger.LogInformation($"No Company with ID {companyId} found!");
                 return NotFound($"No Company with ID {companyId} found!");
             }
-            if (!await IsUserAuthenticated(companyId))
+            if (!await _secureRepository.IsUserAuthenticated(companyId))
             {
                 _logger.LogInformation("User is not authenticated.");
                 return Unauthorized("User is not authenticated.");
@@ -145,18 +145,6 @@ namespace Api.Controllers
             return Ok($"Company with ID {companyId} removed successfully!");
         }
 
-        #region Helpers
-        //Todo: Change from public to private?
-        public async Task<bool> IsUserAuthenticated(int id)
-        {
-            var company = await _companyRepository.GetCompanyById(id);
-            if (company == null)
-            {
-                return false;
-            }
-            return await _secureRepository.VerifyPasswordAsync(company.Id, company.PasswordHash);
-        }
-        #endregion
-    }
+     }
 
 }
