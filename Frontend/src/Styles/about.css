@@ -1,0 +1,31 @@
+/* About.css */
+.title-about{
+    margin-bottom: 40px;
+    align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.about-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .about-section {
+    display: flex;
+    margin-bottom: 40px;
+  }
+  
+  .about-image {
+    width: 200px; /* Adjust the image width as needed */
+    height: 150px; /* Adjust the image height as needed */
+    margin-right: 20px;
+    object-fit: cover;
+  }
+  
+  .about-text {
+    flex: 1;
+  }
+  
+  /* Additional styling can be added based on your design preferences */
+  

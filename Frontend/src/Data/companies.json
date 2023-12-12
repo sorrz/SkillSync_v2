@@ -1,11 +1,11 @@
 [
     {
         "id": 1,
-        "name": "this company",
-        "imgURL": "",
-        "contactName": "the contact",
-        "contactMail": "the contactMail",
-        "contactPhone": "the contactPhone",
+        "name": "Voyado",
+        "imgURL": "https://cykelvanligast.se/wp-content/uploads/2022/10/Voyado_Main-logo_black-e8e7da35020159cd2c57f136772a7237.png",
+        "contactName": "Mr. Mister",
+        "contactMail": "mrMister@voyado.com",
+        "contactPhone": "+46 777 777 777",
         "TechStack" : [
             "c#",
             "JS",
@@ -19,11 +19,11 @@
     },
     {
         "id": 2,
-        "name": "this company",
-        "imgURL": "",
-        "contactName": "the contact",
-        "contactMail": "the contactMail",
-        "contactPhone": "the contactPhone",
+        "name": "Consid",
+        "imgURL": "https://via.tt.se/data/images/00386/69dd7020-4267-4d39-aeb1-51c9c4aaa4ca.png",
+        "contactName": "mr Mister",
+        "contactMail": "mrMister@consid.com",
+        "contactPhone": "+46 777 777 777",
         "TechStack" : [
             "c#",
             "JS",
@@ -37,11 +37,11 @@
     },
     {
         "id": 3,
-        "name": "this company",
-        "imgURL": "",
-        "contactName": "the contact",
-        "contactMail": "the contactMail",
-        "contactPhone": "the contactPhone",
+        "name": "CenterCom",
+        "imgURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMfr5EzqFq12f-08Fyj0tRjiorjq2TKu_PEKdY7uFvWg&s",
+        "contactName": "Mr. Mister",
+        "contactMail": "mrMister@centercom.com",
+        "contactPhone": "+46 777 777 777",
         "TechStack" : [
             "c#",
             "JS",

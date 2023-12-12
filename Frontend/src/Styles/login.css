@@ -1,0 +1,24 @@
+/* Login.css */
+
+.LoginContainer {
+    position: relative;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 50px;
+    background: url('../assets/dans_logo_png.png') no-repeat center center;
+    background-size: cover;
+    padding: 20px;
+  }
+  
+  .LoginContainer h3 {
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    color: #000;;
+  }
+  .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Optionally set a height for the container */
+  }

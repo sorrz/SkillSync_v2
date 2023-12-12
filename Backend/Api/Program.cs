@@ -1,4 +1,6 @@
+using Api.Helpers.Mapping;
 using Infrastructure.Context;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MappingService));
+builder.Services.AddTransient<IStudentRepository, StudentRepository>();
+builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
+builder.Services.AddTransient<ISecureRepository, SecureRepository>();
+
 
 // Setup Logging
 builder.Logging.AddConsole();
@@ -55,6 +62,7 @@ try
 }
 catch (Exception error)
 {
+    Console.WriteLine(error);
     // Throw Error
 }
 

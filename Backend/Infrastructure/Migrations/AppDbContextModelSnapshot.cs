@@ -78,6 +78,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ConnectedTo")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("EndLia1")
                         .HasColumnType("TEXT");
 
@@ -91,6 +94,10 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("LinkedInProfile")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("MailAddress")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -100,7 +107,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
@@ -115,6 +121,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartLia2")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StudentSalt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TechStack")

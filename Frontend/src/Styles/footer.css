@@ -1,0 +1,123 @@
+.footer {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dl-color-gray-black);
+  }
+  .footer1 {
+    width: 100%;
+    display: flex;
+    max-width: var(--dl-size-size-maxwidth);
+    align-items: center;
+    padding-top: var(--dl-space-space-fourunits);
+    padding-left: var(--dl-space-space-threeunits);
+    padding-right: var(--dl-space-space-threeunits);
+    flex-direction: column;
+    padding-bottom: var(--dl-space-space-fourunits);
+    justify-content: space-between;
+  }
+  .container6 {
+    gap: var(--dl-space-space-oneandhalfunits);
+    display: flex;
+    max-width: var(--dl-size-size-maxwidth);
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .logo2 {
+    color: var(--dl-color-gray-white);
+    font-size: 2em;
+    font-weight: bold;
+    margin-right: 20px; 
+  }
+  .nav1 {
+    flex: 0 0 auto;
+    display: flex;
+    margin-top: 0px;
+    align-items: center;
+    flex-direction: row;
+  }
+  .nav1 span {
+    margin-right: 10px; /* Adjust the margin as needed */
+    color: black;
+    transition: height 0.3s ease;
+    z-index: 1; 
+  }
+  .nav1 a {
+    color: inherit; /* or specify the desired color */
+    text-decoration: none; /* remove underline */
+  }
+  .nav1 a:hover {
+    color: #f2ae39; /* or the desired hover color */
+  }
+  .nav12 {
+    color: var(--dl-color-secondary-gray500);
+    margin-left: auto;
+  }
+  .nav22 {
+    color: var(--dl-color-secondary-gray500);
+    margin-left:2px;
+  }
+  
+  .nav52 {
+    color: var(--dl-color-secondary-gray500);
+    margin-left: 2px;
+  }
+  .separator {
+    flex: 0 0 auto;
+    width: 100%;
+    height: 0px;
+    display: flex;
+    margin-top: var(--dl-space-space-twounits);
+    align-items: flex-start;
+    margin-left: 0px;
+    border-color: var(--dl-color-gray-800);
+    border-style: solid;
+    border-width: 1px;
+    margin-right: 0px;
+    margin-bottom: var(--dl-space-space-twounits);
+    flex-direction: row;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+  }
+  .container7 {
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .text6 {
+    color: var(--dl-color-secondary-gray500);
+  }
+  .icon-group1 {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  @font-face {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 900;
+    src: url(./fonts/Mulish-Regular.ttf) format('woff2');
+    /* ... other properties ... */
+  }
+
+  .footer-logo {
+    width: 30px; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Adjust the margin as needed */
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: rox;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between contact info items */
+  }
