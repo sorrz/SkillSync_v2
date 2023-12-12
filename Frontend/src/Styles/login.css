@@ -16,3 +16,9 @@
     margin-bottom: 0.8rem;
     color: #000;;
   }
+  .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Optionally set a height for the container */
+  }

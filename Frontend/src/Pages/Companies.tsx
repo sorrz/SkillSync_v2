@@ -22,7 +22,7 @@ export function Companies() {
 
   return (
     <Container>
-      <h1>Companies</h1>
+      <h1 className="mulish-font">Companies</h1>
       {companies.length > 0 ? (
         <Row md={2} xs={1} lg={3} className="g-3">
           {companies.map((item) => (

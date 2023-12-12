@@ -20,7 +20,7 @@ export function Students() {
   }, []);
 
   return (
-    <Container>
+    <Container className='mulish-font'>
       <h1>Students</h1>
       {students.length > 0 ? (
         <Container>
