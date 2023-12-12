@@ -13,19 +13,24 @@ namespace Api.Controllers
         private readonly IStudentRepository _studentRepository;
         private readonly ILogger<StudentController> _logger;
         private readonly IMapper _mapper;
+        private readonly ISecureRepository _secureRepository;
 
+<<<<
+        public StudentController(
+            IStudentRepository studentRepository,
+            ILogger<StudentController> logger,
+            IMapper mapper,
+            ISecureRepository secureRepository
+            )
         public StudentController(IStudentRepository studentRepository, ILogger<StudentController> logger, IMapper mapper)
+
         {
             _studentRepository = studentRepository;
             _logger = logger;
             _mapper = mapper;
         }
 
-        [HttpGet("GetHealthStudent")]
-        public string GetHealth()
-        {
-            return $"Student ok @ {DateTime.Now.ToLocalTime()}";
-        }
+        #region Controllers
 
         [HttpGet("{id}", Name = "GetById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -84,6 +89,11 @@ namespace Api.Controllers
                 _logger.LogWarning($"Student with id {id} was not found", id);
                 return NotFound($"Student with id {id} was not found");
             }
+            if (!await IsUserAuthenticated(id))
+            {
+                _logger.LogInformation("User is not authenticated.");
+                return Unauthorized("User is not authenticated.");
+            }
             _logger.LogInformation($"Student whit id {id} was deleted", id);
             return Ok($"Student whit id {id} was deleted");
         }
@@ -101,9 +111,16 @@ namespace Api.Controllers
                     return BadRequest();
                 }
 
+                if (!await IsUserAuthenticated(id))
+                {
+                    _logger.LogInformation("User is not authenticated.");
+                    return Unauthorized("User is not authenticated.");
+                }
+                var student = _mapper.Map<StudentModel>(studentDto);
                 // 
                 var student = await _studentRepository.GetStudentById(studentDto.Id);
                 //
+
                 var updatedStudent = await _studentRepository.UpdateStudent(student);
                 _logger.LogInformation("Student was updated");
                 return Ok(_mapper.Map<StudentDto>(updatedStudent));
@@ -129,5 +146,19 @@ namespace Api.Controllers
 
             return CreatedAtAction("GetStudentById", new { id = createdStudent.Id }, createdStudent);
         }
+        #endregion
+
+        #region Helpers
+        //Todo: Change from public to private?
+        public async Task<bool> IsUserAuthenticated(int id)
+        {
+            var student = await _studentRepository.GetStudentById(id);
+            if (student == null)
+            {
+                return false;
+            }
+            return await _secureRepository.VerifyPasswordAsync(student.Id, student.PasswordHash);
+        }
+        #endregion
     }
 }
