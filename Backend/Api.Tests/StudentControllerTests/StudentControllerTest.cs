@@ -172,6 +172,8 @@ namespace Api.Tests.StudentControllerTests
                 .ReturnsAsync(true);
             _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
+            _secureRepositoryMock.Setup(repo => repo.IsUserAuthenticated(id)).ReturnsAsync(true);
+
             //Act
             var result = await _sut.DeleteStudentById(id);
 
@@ -225,6 +227,7 @@ namespace Api.Tests.StudentControllerTests
                 .Returns(student);
             _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
+            _secureRepositoryMock.Setup(repo => repo.IsUserAuthenticated(id)).ReturnsAsync(true);
 
             //Act
             var result = await _sut.EditStudent(id, studentDto);

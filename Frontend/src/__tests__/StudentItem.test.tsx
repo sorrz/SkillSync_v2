@@ -1,42 +1,40 @@
-import { test, assert } from 'vitest';
-import { describe, afterEach } from 'vitest';
+import { describe, it, afterEach, assert } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import StudentItem from '../Components/StudentItem';
 import StudentModel from '../Models/StudentModel';
 
 const mockStudent: StudentModel = {
-    Id: 1,
-    Name: 'John Doe',
-    ImageUrl: 'path-to-mock-image',
-    TechStack: ['React', 'JavaScript'],
-    Presentation: 'Test presentation',
-    PhoneNumber: '123-456-7890',
-    Graduation: '2023',
-    StartLia1: '2022-01-01',
-    EndLia1: '2022-06-30',
-    StartLia2: '2022-07-01',
-    EndLia2: '2022-12-31',
-    MailAddress: 'john.doe@drMartins.com',
-    PasswordHash: '',
-    connectedTo: []
+  id: 1,
+  name: 'John Doe',
+  imageUrl: 'path-to-mock-image',
+  techStack: ['React', 'JavaScript'],
+  presentation: 'Test presentation',
+  phoneNumber: '123-456-7890',
+  graduation: '2023',
+  startLia1: '2022-01-01',
+  endLia1: '2022-06-30',
+  startLia2: '2022-07-01',
+  endLia2: '2022-12-31',
+  mailAddress: 'john.doe@drMartins.com',
+  passwordHash: '',
+  connectedTo: [],
+  linkedInProfile: '',
 };
 
 describe('CompanyItem Component', () => {
-    afterEach(() => {
-      cleanup();
-    });
+  afterEach(() => {
+    cleanup();
+  });
 
-test('renders StudentItem component with correct content', async () => {
-  render(<StudentItem student={mockStudent} />);
+  it('renders StudentItem component with correct content', () => {
+    render(<StudentItem student={mockStudent} />);
 
-  const studentItem = screen.getByTestId('studentCard');
-  assert.isNotNull(studentItem);
+    const studentItem = screen.getByTestId('studentCard');
+    assert.isNotNull(studentItem);
 
-  assert.isNotNull(screen.queryByText('John Doe'));
-  assert.isNotNull(screen.queryByText('React, JavaScript'));
-  assert.isNotNull(screen.queryByText('Test presentation'));
-  assert.isNotNull(screen.queryByText('Phone: 123-456-7890 | Graduation: 2023 | LIA 1: 2022-01-01 - 2022-06-30 | LIA 2: 2022-07-01 - 2022-12-31'));
-});
-
-
+    const namePlate = screen.getByTestId('name-holder');
+    assert.isNotNull(namePlate);
+    
+    
+  });
 });

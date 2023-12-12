@@ -18,13 +18,13 @@ const StudentItem: React.FC<StudentItemProps> = ({ student }) => {
   }
 
   return (
-    <Card className="mb-4 border rounded shadow" style={{  width: '65vw', margin: '0.2rem' }}>
+    <Card className="mb-4 border rounded shadow" data-testid="studentCard" style={{  width: '65vw', margin: '0.2rem' }}>
       <Row justify="space-between" align="middle">
         <Col span={4}>
           <Avatar size={150} icon={<UserOutlined />} src={student.imageUrl} className="circle" />
         </Col>
         <Col span={16}>
-          <div className="text-center" style={{ background: '#ccffcc', padding: '10px', borderRadius: '5px' }}>
+          <div className="text-center" data-testid="name-holder" style={{ background: '#ccffcc', padding: '10px', borderRadius: '5px' }}>
             {student.name && (
               <h3>Hi, I'm <br />{student.name}</h3>
             )}

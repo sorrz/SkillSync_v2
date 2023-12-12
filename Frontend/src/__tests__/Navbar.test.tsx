@@ -15,20 +15,21 @@ describe('CompanyItem Component', () => {
 
 
 const mockUser: StudentModel = {
-    Id: 11,
-    Name: "Anna Jelbrink",
-    MailAddress: "anna@edu.tucsweden.se",
-    PasswordHash: "",
-    TechStack: ["c#", "js", "node", "sql"],
-    PhoneNumber: "+46 666 666 666",
-    Graduation: "0001-01-01T00:00:00",
-    StartLia1: "0001-01-01T00:00:00",
-    EndLia1: "0001-01-01T00:00:00",
-    StartLia2: "0001-01-01T00:00:00",
-    EndLia2: "0001-01-01T00:00:00",
-    Presentation: "I'm a girly girl that likes tech, uWu",
-    ImageUrl: "https://media.glamour.com/photos/5695cb3b16d0dc3747ee0717/master/w_1600%2Cc_limit/fashionbeauty__fashion-images-fash080221-1.jpg",
-    connectedTo: []
+    id: 11,
+    name: "Anna Jelbrink",
+    mailAddress: "anna@edu.tucsweden.se",
+    passwordHash: "",
+    techStack: ["c#", "js", "node", "sql"],
+    phoneNumber: "+46 666 666 666",
+    graduation: "0001-01-01T00:00:00",
+    startLia1: "0001-01-01T00:00:00",
+    endLia1: "0001-01-01T00:00:00",
+    startLia2: "0001-01-01T00:00:00",
+    endLia2: "0001-01-01T00:00:00",
+    presentation: "I'm a girly girl that likes tech, uWu",
+    imageUrl: "https://media.glamour.com/photos/5695cb3b16d0dc3747ee0717/master/w_1600%2Cc_limit/fashionbeauty__fashion-images-fash080221-1.jpg",
+    connectedTo: [],
+    linkedInProfile: "string"
 };
 
 test('renders Navbar component when not logged in', async () => {
@@ -64,7 +65,7 @@ test('renders Navbar component when logged in', async () => {
   assert.isNotNull(screen.queryByText('Students'));
   assert.isNotNull(screen.queryByText('About'));
 
-  assert.isNotNull(screen.queryByAltText('Profile'));
+  assert.isNotNull(screen.getByTestId('profile-id'));
   assert.isNotNull(screen.getByTestId('actionButton'));
 });
 

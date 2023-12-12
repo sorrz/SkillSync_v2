@@ -278,6 +278,7 @@ namespace Api.Tests.CompanyControllerTests
             _mapper.Setup(mapper => mapper.Map<CompanyDto>(updatedCompanyModel)).Returns(updatedCompanyDto);
             _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
+            _secureRepositoryMock.Setup(repo => repo.IsUserAuthenticated(companyId)).ReturnsAsync(true);
 
             // Act
             var result = await _sut.EditCompany(companyId, newCompanyDto);
@@ -359,6 +360,7 @@ namespace Api.Tests.CompanyControllerTests
             _repo.Setup(repo => repo.DeleteCompanyById(companyId)).ReturnsAsync(true);
             _secureRepositoryMock.Setup(repo => repo.VerifyPasswordAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
+            _secureRepositoryMock.Setup(repo => repo.IsUserAuthenticated(companyId)).ReturnsAsync(true);
 
             // Act
             var result = await _sut.DeleteCompanyById(companyId);

@@ -23,14 +23,15 @@ export function Navbar({ isLoggedIn, user, onLogout }: NavbarProps) {
 
   const renderProfileContent = () => {
     if (isLoggedIn) {
-      if (!user.ImageUrl === "string") // TODO! THIS NEEDS TO BE FIXED!
+      if (typeof user.imageUrl === "string") 
       {
         return (
           <>
             <img
-              src={user.ImageUrl}
+              src={user.imageUrl}
               style={{ height: '3rem', width: '3rem', borderRadius: '50%', objectFit: 'cover' }}
               alt="Profile"
+              data-testid="profile-id"
               className="profile-picture"
             />
             <Button
@@ -51,7 +52,7 @@ export function Navbar({ isLoggedIn, user, onLogout }: NavbarProps) {
         );
       } else {
         return (
-          <div
+          <div data-testid="profile-id"
             style={{
               height: '3rem',
               width: '3rem',

@@ -6,8 +6,8 @@ import LinkedInIcon from "./LinkedinIcon";
 
 const Footer = () => {
   return (
-    <div className="footer">
-      <footer className="footer1">
+    <div className="footer" data-testid="footer-id">
+      <footer className="footer1" data-testid="footer-container">
         <div className="container6">
           <span className="logo2 mulish-font">SKILLSYNC</span>
           <nav className="nav1">
