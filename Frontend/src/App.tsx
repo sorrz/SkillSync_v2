@@ -11,9 +11,10 @@ import Footer from './Components/Footer';
 import StudentModel from './Models/StudentModel';
 import { Profile } from './Pages/Profile';
 import  Register  from './Pages/Register';
-import { StudentLogin } from './Services/CompanyServices';
+import { AddStudent, StudentLogin } from './Services/CompanyServices';
+import { notification } from 'antd';
 
-function App() { 
+  function App() { 
 
   const [user, setUser] = useState<StudentModel | null>(null);
   const navigate = useNavigate();
@@ -49,8 +50,13 @@ function App() {
   };
 
   const handleRegistration = (student: StudentModel) => {
-    // Handle the registration logic (e.g., send data to the server)
+    AddStudent(student);
     console.log('Registered student:', student);
+    notification.success({
+      message: 'User Created',
+      description: 'Your user has been created successfully.',
+    });
+    navigate('/login');
   };
 
   return (

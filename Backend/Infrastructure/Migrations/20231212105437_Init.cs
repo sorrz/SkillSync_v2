@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class NewDatabaseModel : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,7 +43,7 @@ namespace Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     MailAddress = table.Column<string>(type: "TEXT", nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
                     StudentSalt = table.Column<string>(type: "TEXT", nullable: false),
                     TechStack = table.Column<string>(type: "TEXT", nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
@@ -54,7 +54,7 @@ namespace Infrastructure.Migrations
                     EndLia2 = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Presentation = table.Column<string>(type: "TEXT", nullable: false),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: false),
-                    ConnectedTo = table.Column<string>(type: "TEXT", nullable: false),
+                    ConnectedTo = table.Column<string>(type: "TEXT", nullable: true),
                     LinkedInProfile = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

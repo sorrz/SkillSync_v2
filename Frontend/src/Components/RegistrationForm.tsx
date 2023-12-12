@@ -5,34 +5,58 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import StudentModel from '../Models/StudentModel';
 import '../Styles/registration.css';
 
+async function doHash(password: string) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+  return hashHex;
+}
+
 const { Option } = Select;
 
 interface RegistrationFormProps {
   handleRegistration: (student: StudentModel) => void;
 }
 
+  
+
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ handleRegistration }) => {
 
     const [form] = Form.useForm();
     const [selectedTechStack, setSelectedTechStack] = useState<string[]>([]);
-  
+    const [password, handlePasswordChange] = useState<string | undefined>();
+
     const handleTechStackChange = (value: string[]) => {
       setSelectedTechStack(value);
     };
 
-  const onFinish = (values: any) => {
-    const student: StudentModel = {
-      Id: Math.floor(Math.random() * 1000),
-      TechStack: selectedTechStack,
-      ...values,
+
+    const onFinish = async (values: StudentModel) => {
+      const { id: x, techStack: y, connectedTo: z, passwordHash: o, ...otherValues } = values;
+  
+      const hashedPassword = await doHash(password ?? '');
+  
+      const student = {
+        id: 0,
+        techStack: selectedTechStack,
+        connectedTo: [""],
+        passwordHash: hashedPassword,
+        ...otherValues,
+      };
+  
+      handleRegistration(student);
     };
-    handleRegistration(student);
-  };
+  
 
   return (
     
     <Form form={form} onFinish={onFinish} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }} justify-content-center flex-wrap>
-      <Form.Item label="Name" name="Name" rules={[{ required: true, message: 'Please enter your name' }]}>
+      <Form.Item label="Name" name="Name" rules={[{ required: true, message: 'Please enter your name' }]} >
         <Input />
       </Form.Item>
 
@@ -44,9 +68,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ handleRegistration 
         <Input type="email" />
       </Form.Item>
 
-      <Form.Item label="Password" name="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
-        <Input.Password />
-      </Form.Item>
+      <Form.Item label="Password" name="Password" rules={[{ required: true, message: 'Please enter your password' }]} >
+        <Input type="password" onChange={(e) => handlePasswordChange(e.target.value)} />
+    </Form.Item>
 
       <Form.Item label="Phone Number" name="PhoneNumber">
         <Input />

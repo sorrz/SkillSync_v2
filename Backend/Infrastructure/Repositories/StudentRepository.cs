@@ -24,10 +24,10 @@ namespace Infrastructure.Repositories
 
         public async Task<StudentModel> AddStudent(StudentModel student, string inputHash)
         {
-            var salt = await _secureRepository.CreateStudentHashAsync(student, inputHash);
+            await _secureRepository.CreateStudentHashAsync(student, inputHash);
             await _context.Students.AddAsync(student);
             await _context.SaveChangesAsync();
-            _logger.LogInformation($"Student whit id {student.Id} was created");
+            _logger.LogInformation($"Student with id {student.Id} was created");
             return student;
         }
 

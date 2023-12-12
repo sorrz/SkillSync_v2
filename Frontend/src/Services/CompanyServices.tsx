@@ -9,6 +9,16 @@ export const StudentLogin = async (email: string, passwordHash: string) => {
     return await axios.post(apiUrl+`/Api?email=${email}&passwordHash=${passwordHash}`)
       .then(response => response.data);
   };
+
+  export const AddStudent = async (student: StudentModel) => {
+    try {
+      const response = await axios.post(apiUrl + '/api/Student', student);
+      return response.data;
+    } catch (error) {
+      console.error('Error adding student:', error);
+      throw error;
+    }
+  };
   
 export const getAllCompanies = async () => {
     return await axios.get(apiUrl+`/api/Company`)

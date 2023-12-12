@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
             if (!hasBeenSalted) return false;
 
             var hasBeenHashed = await SetStudentHash(student, inputHash);
-            if (!hasBeenSalted) return false;
+            if (!hasBeenHashed) return false;
 
             return true;
         }
