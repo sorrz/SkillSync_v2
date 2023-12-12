@@ -31,7 +31,7 @@ function App() {
 }
 
   const handleLogout = () => {
-    navigate('/');
+    navigate('/home');
     setUser(null);
   };
 
@@ -42,11 +42,8 @@ function App() {
       const loggedInUser = await StudentLogin(email, hashedPassword);
       setUser(loggedInUser);
       console.log(loggedInUser);
-      // Optionally, you can perform additional actions after login if needed.
-      // For example, you can navigate to a different page.
       navigate('/profile');
     } catch (error) {
-      // Handle login error, e.g., show an error message
       console.error('Login failed', error);
     }
   };
