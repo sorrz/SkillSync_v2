@@ -122,6 +122,13 @@ Run the following command for frontend tests:
 npm run test
 
 ```
+```bash
+
+npm run coverage
+
+```
+Should render this coverage:
+![image](https://github.com/sorrz/SkillSync_v2/assets/27415422/9662d6e9-c164-49a9-91d5-9548cd7f9a31)
 
 ### **Project Structure**
 
