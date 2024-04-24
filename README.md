@@ -1,6 +1,5 @@
 
-SkillSync v.2       :computer: Coders :nerd_face: Dan Stjärnborg, Johan Holm, Delia Grenstadius
-<br>
+SkillSync v.2      
 ---------------------------------------------------
 
 ## **Project Overview**
